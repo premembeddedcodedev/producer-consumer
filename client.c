@@ -10,9 +10,6 @@ static volatile int seq = 0;
 
 clinic_info_t *clinic_info;
 
-//skip_q intpted_patient;
-
-
 void intHandler(int dummy) {
     keepRunning = 0;
 }
@@ -90,10 +87,8 @@ int enqueue(Queue *Q, patients_info_t *pinfo, bool is_waitq)
 		Q->size++;
 		printf("Enq: #elements in %s : %d\n", (is_waitq ? "WQ": "CBQ"), Q->size);
 		newQ = (Queue*) malloc(sizeof(Queue));
-		//newQ->e = rand() % 10;
 		newQ->seq = seq++;
 		newQ->pinfo = pinfo;
-		//printf("%d\n", newQ->e);
 		/* add to the list tail */
 		list_add_tail(&(newQ->list), &(Q->list));
 		//print_list_data(&Q->list);
@@ -137,7 +132,6 @@ void *register_patients(void *param)
 {
 	int val = 0, check = NUMBER_OF_THREADS;
 	srand(time(NULL));
-	//memset(&intpted_patient, 0, sizeof(skip_q));
 
 	while(1) {
 		val = (rand() % 6) + 4;
@@ -185,8 +179,6 @@ int main()
 	}
 
 	memset(clinic_info, 0, sizeof(clinic_info_t));
-
-	//signal(SIGINT, intHandler);
 
 	clinic_info->wq = initQueue(WQMAX_ROOM_SIZE);
 	clinic_info->cbq  = initQueue(CBQMAX_ROOM_SIZE);
