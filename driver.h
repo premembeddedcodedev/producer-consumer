@@ -30,5 +30,5 @@ struct threadpool
 void execute(void (*somefunction)(void *p), void *p);
 int pool_submit(void (*somefunction)(void *p), clinic_info_t *clinic_info);
 void *worker(void *param);
-int pool_init(clinic_info_t *clinic_info);
+void pool_init(clinic_info_t *clinic_info);
 void pool_shutdown(void);

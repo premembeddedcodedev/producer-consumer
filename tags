@@ -14,9 +14,6 @@ process_leftover	client.c	/^void *process_leftover(void *param)$/;"	f	typeref:ty
 getinstance	client.c	/^void *getinstance(void)$/;"	f	typeref:typename:void *
 main	client.c	/^int main()$/;"	f	typeref:typename:int
 __CLIENT_H__	client.h	/^#define __CLIENT_H__$/;"	d
-WQMAX_ROOM_SIZE	client.h	/^#define WQMAX_ROOM_SIZE /;"	d
-CBQMAX_ROOM_SIZE	client.h	/^#define CBQMAX_ROOM_SIZE /;"	d
-NUMBER_OF_THREADS	client.h	/^#define NUMBER_OF_THREADS /;"	d
 TRUE	client.h	/^#define TRUE /;"	d
 DEBUG	client.h	/^#define DEBUG /;"	d
 RECEPTIONTID	client.h	/^#define RECEPTIONTID /;"	d
@@ -25,31 +22,6 @@ low_prio	client.h	/^typedef struct low_prio {$/;"	s
 find_min	client.h	/^	int find_min;$/;"	m	struct:low_prio	typeref:typename:int
 ptr	client.h	/^	void *ptr;$/;"	m	struct:low_prio	typeref:typename:void *
 skip_q	client.h	/^}skip_q;$/;"	t	typeref:struct:low_prio
-doctor_info	client.h	/^typedef struct doctor_info {$/;"	s
-doc_deals_with_spec	client.h	/^	drevt_aptmt_t doc_deals_with_spec;$/;"	m	struct:doctor_info	typeref:typename:drevt_aptmt_t
-doc_events	client.h	/^	doctor_event_t doc_events;$/;"	m	struct:doctor_info	typeref:typename:doctor_event_t
-interrupter_details	client.h	/^	ptevt_intr_t interrupter_details;$/;"	m	struct:doctor_info	typeref:typename:ptevt_intr_t
-num_patients	client.h	/^	int num_patients;$/;"	m	struct:doctor_info	typeref:typename:int
-doctorid	client.h	/^	int doctorid;$/;"	m	struct:doctor_info	typeref:typename:int
-patientid	client.h	/^	int patientid;$/;"	m	struct:doctor_info	typeref:typename:int
-interrupt_count	client.h	/^	int interrupt_count;$/;"	m	struct:doctor_info	typeref:typename:int
-doctor_info_t	client.h	/^}doctor_info_t;$/;"	t	typeref:struct:doctor_info
-patient_data	client.h	/^typedef struct patient_data {$/;"	s
-patient_id	client.h	/^	int patient_id;$/;"	m	struct:patient_data	typeref:typename:int
-idle_time	client.h	/^	int idle_time;$/;"	m	struct:patient_data	typeref:typename:int
-interrupted	client.h	/^	bool interrupted;$/;"	m	struct:patient_data	typeref:typename:bool
-patient_reg_info	client.h	/^	ptevt_register_t patient_reg_info;$/;"	m	struct:patient_data	typeref:typename:ptevt_register_t
-doctor_info	client.h	/^	ptevt_dr_t doctor_info;$/;"	m	struct:patient_data	typeref:typename:ptevt_dr_t
-event_info	client.h	/^	patient_event_t event_info;$/;"	m	struct:patient_data	typeref:typename:patient_event_t
-doctor_fb	client.h	/^	ptevt_feedback_t doctor_fb;$/;"	m	struct:patient_data	typeref:typename:ptevt_feedback_t
-list	client.h	/^	struct list_head list;$/;"	m	struct:patient_data	typeref:struct:list_head
-patients_info_t	client.h	/^}patients_info_t;$/;"	t	typeref:struct:patient_data
-q_lists	client.h	/^typedef struct q_lists {$/;"	s
-silver_list	client.h	/^	struct list_head silver_list;$/;"	m	struct:q_lists	typeref:struct:list_head
-gold_list	client.h	/^	struct list_head gold_list;$/;"	m	struct:q_lists	typeref:struct:list_head
-platinum_list	client.h	/^	struct list_head platinum_list;$/;"	m	struct:q_lists	typeref:struct:list_head
-vip_list	client.h	/^	struct list_head vip_list;$/;"	m	struct:q_lists	typeref:struct:list_head
-q_patients	client.h	/^}q_patients;$/;"	t	typeref:struct:q_lists
 clinic_info	client.h	/^typedef struct clinic_info {$/;"	s
 pinfo	client.h	/^	patients_info_t pinfo;$/;"	m	struct:clinic_info	typeref:typename:patients_info_t
 dinfo	client.h	/^	doctor_info_t dinfo[NUMBER_OF_THREADS + 1];$/;"	m	struct:clinic_info	typeref:typename:doctor_info_t[]
@@ -60,6 +32,29 @@ seq_id	client.h	/^	uint32_t seq_id;$/;"	m	struct:clinic_info	typeref:typename:ui
 reception	client.h	/^	pthread_t reception;$/;"	m	struct:clinic_info	typeref:typename:pthread_t
 leftroom	client.h	/^	pthread_t leftroom;$/;"	m	struct:clinic_info	typeref:typename:pthread_t
 clinic_info_t	client.h	/^}clinic_info_t;$/;"	t	typeref:struct:clinic_info
+__COMMON_H__	common.h	/^#define __COMMON_H__$/;"	d
+WQMAX_ROOM_SIZE	common.h	/^#define WQMAX_ROOM_SIZE /;"	d
+CBQMAX_ROOM_SIZE	common.h	/^#define CBQMAX_ROOM_SIZE /;"	d
+NUMBER_OF_THREADS	common.h	/^#define NUMBER_OF_THREADS /;"	d
+doctor_info	common.h	/^typedef struct doctor_info {$/;"	s
+doc_deals_with_spec	common.h	/^	drevt_aptmt_t doc_deals_with_spec;$/;"	m	struct:doctor_info	typeref:typename:drevt_aptmt_t
+doc_events	common.h	/^	doctor_event_t doc_events;$/;"	m	struct:doctor_info	typeref:typename:doctor_event_t
+interrupter_details	common.h	/^	ptevt_intr_t interrupter_details;$/;"	m	struct:doctor_info	typeref:typename:ptevt_intr_t
+num_patients	common.h	/^	int num_patients;$/;"	m	struct:doctor_info	typeref:typename:int
+doctorid	common.h	/^	int doctorid;$/;"	m	struct:doctor_info	typeref:typename:int
+patientid	common.h	/^	int patientid;$/;"	m	struct:doctor_info	typeref:typename:int
+interrupt_count	common.h	/^	int interrupt_count;$/;"	m	struct:doctor_info	typeref:typename:int
+doctor_info_t	common.h	/^}doctor_info_t;$/;"	t	typeref:struct:doctor_info
+patient_data	common.h	/^typedef struct patient_data {$/;"	s
+patient_id	common.h	/^	int patient_id;$/;"	m	struct:patient_data	typeref:typename:int
+idle_time	common.h	/^	int idle_time;$/;"	m	struct:patient_data	typeref:typename:int
+interrupted	common.h	/^	bool interrupted;$/;"	m	struct:patient_data	typeref:typename:bool
+patient_reg_info	common.h	/^	ptevt_register_t patient_reg_info;$/;"	m	struct:patient_data	typeref:typename:ptevt_register_t
+doctor_info	common.h	/^	ptevt_dr_t doctor_info;$/;"	m	struct:patient_data	typeref:typename:ptevt_dr_t
+event_info	common.h	/^	patient_event_t event_info;$/;"	m	struct:patient_data	typeref:typename:patient_event_t
+doctor_fb	common.h	/^	ptevt_feedback_t doctor_fb;$/;"	m	struct:patient_data	typeref:typename:ptevt_feedback_t
+list	common.h	/^	struct list_head list;$/;"	m	struct:patient_data	typeref:struct:list_head
+patients_info_t	common.h	/^}patients_info_t;$/;"	t	typeref:struct:patient_data
 worktodo	driver.c	/^struct task worktodo;$/;"	v	typeref:struct:task
 pool	driver.c	/^struct threadpool *pool;$/;"	v	typeref:struct:threadpool *
 begin	driver.c	/^time_t begin;$/;"	v	typeref:typename:time_t
@@ -252,7 +247,7 @@ PTHREADS	Makefile	/^PTHREADS=-lpthread -lrt$/;"	m
 all	Makefile	/^all: client.o driver.o queue.o$/;"	t
 client.o	Makefile	/^client.o: client.c hospitalexe\/doctor.h hospitalexe\/patient.h hospitalexe\/clinic.h client.h q/;"	t
 driver.o	Makefile	/^driver.o: driver.c driver.h hospitalexe\/doctor.h hospitalexe\/patient.h hospitalexe\/clinic.h c/;"	t
-queue.o	Makefile	/^queue.o: queue.c queue.h hospitalexe\/doctor.h hospitalexe\/patient.h hospitalexe\/clinic.h clie/;"	t
+queue.o	Makefile	/^queue.o: queue.c client.h queue.h hospitalexe\/doctor.h hospitalexe\/patient.h hospitalexe\/clin/;"	t
 clean	Makefile	/^clean:$/;"	t
 initQueue	queue.c	/^Queue * initQueue(int max)$/;"	f	typeref:typename:Queue *
 enqueue_front	queue.c	/^int enqueue_front(Queue *Q, patients_info_t *pinfo, bool is_waitq)$/;"	f	typeref:typename:int

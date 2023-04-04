@@ -13,7 +13,7 @@
 #include "hospitalexe/clinic.h"
 #include "hospitalexe/doctor.h"
 #include "hospitalexe/patient.h"
-
+#include <semaphore.h>
 
 
 #define TRUE 1
@@ -37,12 +37,11 @@ typedef struct clinic_info {
 	uint32_t seq_id;
 	pthread_t reception;
 	pthread_t leftroom;
+	pthread_mutex_t mutex;
+	sem_t semaphore;
 }clinic_info_t;
 
 int process_cbq(clinic_info_t *clinic_info);
 int calculate_diag_time(ailment_e diag_type);
-//patients_info_t *dequeue(Queue *Q, bool is_waitq);
-//int enqueue(Queue *Q, patients_info_t *pinfo, bool is_waitq);
 void *getinstance(void);
-//int enqueue_front(Queue *Q, patients_info_t *pinfo, bool is_waitq);
 #endif

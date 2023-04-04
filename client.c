@@ -106,10 +106,7 @@ int main()
 	clinic_info->cbq  = initQueue(CBQMAX_ROOM_SIZE);
 
 	printf("main %p : %p\n", clinic_info->wq, clinic_info->cbq);
-	if(pool_init(clinic_info) < 0) {
-		printf(" creating WQ and CBQ failed \n");
-		return -ENOMEM;
-	}
+	pool_init(clinic_info);
 
 	pthread_create(&clinic_info->reception, NULL, register_patients, (void *) clinic_info);
 	pthread_create(&clinic_info->leftroom, NULL, process_leftover, (void *) clinic_info);

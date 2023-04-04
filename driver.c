@@ -67,7 +67,7 @@ void wait_for_vip_timesignal(clinic_info_t *clinic_info, patients_info_t *pinfo,
 	ts.tv_sec += ts.tv_nsec / (1000 * 1000 * 1000);
 	ts.tv_nsec %= (1000 * 1000 * 1000);
 	clock_gettime(CLOCK_REALTIME, &start);
-	rc = pthread_cond_timedwait(&vip_request, &pool->mutex, &ts);
+	rc = pthread_cond_timedwait(&vip_request, &clinic_info->mutex, &ts);
 	clock_gettime(CLOCK_REALTIME, &finish);
 	if(rc == 0) {
 		clinic_info->dinfo[tid].interrupt_count++;
@@ -101,20 +101,21 @@ void fill_doctor_details(clinic_info_t *clinic_info, int tid)
 void *worker(void *param)
 {
 	int tid =  (int ) param;
+	clinic_info_t *clinic_info = (clinic_info_t *)getinstance();
 
 	while (TRUE) {
-		sem_wait(&pool->semaphore);
-		pthread_mutex_lock(&pool->mutex);
+		sem_wait(&clinic_info->semaphore);
+		pthread_mutex_lock(&clinic_info->mutex);
 		clinic_info_t *clinic_info = (clinic_info_t *)getinstance();
 		patients_info_t *pinfo = dequeue(clinic_info->wq, true);
 		if(!pinfo) {
 			pthread_cond_broadcast(&cbq_request);
-			pthread_mutex_unlock(&pool->mutex);
-			sem_post(&pool->semaphore);
+			pthread_mutex_unlock(&clinic_info->mutex);
+			sem_post(&clinic_info->semaphore);
 			continue;
 		}
-		pthread_mutex_unlock(&pool->mutex);
-		sem_post(&pool->semaphore);
+		pthread_mutex_unlock(&clinic_info->mutex);
+		sem_post(&clinic_info->semaphore);
 
 		printf("Worker thread[%d] : Dq: ailment: %d, membership: %d\n", tid, pinfo->patient_reg_info.ailment, pinfo->patient_reg_info.membership);
 
@@ -133,10 +134,10 @@ void *worker(void *param)
 			printf("VIP membership executing...\n");
 			sleep(pinfo->idle_time);
 		} else {
-			pthread_mutex_lock(&pool->mutex);
+			pthread_mutex_lock(&clinic_info->mutex);
 			wait_for_vip_timesignal(clinic_info, pinfo, tid);	
-			pthread_mutex_unlock(&pool->mutex);
-			sem_post(&pool->semaphore);
+			pthread_mutex_unlock(&clinic_info->mutex);
+			sem_post(&clinic_info->semaphore);
 		}
 	}
 	pthread_exit(0);
@@ -166,20 +167,20 @@ patients_info_t *register_details(void)
 bool find_min(Queue *p, patients_info_t *pinfo, int *pos)
 {
 	Queue  *tmp;
-	skip_q intpt_min;
+	//skip_q intpt_min;
 	bool found = false;
 	int iteration = 0;
 
-	memset(&intpt_min, 0, sizeof(skip_q)); //Redundant
+	//memset(&intpt_min, 0, sizeof(skip_q)); //Redundant
 
 	int find_min = pinfo->patient_reg_info.membership;
-	intpt_min.ptr = pinfo;
+	//void *ptr = pinfo;
 
 	list_for_each_entry(tmp, &p->list, list){
 		iteration++;
 		if(find_min < tmp->pinfo->patient_reg_info.membership) {
 			find_min = tmp->pinfo->patient_reg_info.membership;
-			intpt_min.ptr = tmp->pinfo;
+			//ptr = tmp->pinfo;
 			found = true;	
 			*pos = iteration;
 		}
@@ -204,18 +205,18 @@ int process_cbq(clinic_info_t *clinic_info)
 {
 	int rc = 0;
 
-	pthread_mutex_lock(&pool->mutex);
-	rc = pthread_cond_wait(&cbq_request, &pool->mutex);
+	pthread_mutex_lock(&clinic_info->mutex);
+	rc = pthread_cond_wait(&cbq_request, &clinic_info->mutex);
 
 	if(rc == 0) {
 		if(clinic_info->cbq->size > 0) {
 			//printf(" from Worker: Signalled properly\n");
-			enqueue_cbq(clinic_info->cbq, clinic_info->wq); //TODO: need to store in
+			enqueue_cbq(clinic_info->cbq, clinic_info->wq); 
 		}
 	}
 
-	sem_post(&pool->semaphore);
-	pthread_mutex_unlock(&pool->mutex);
+	sem_post(&clinic_info->semaphore);
+	pthread_mutex_unlock(&clinic_info->mutex);
 
 	return 0;
 }
@@ -257,7 +258,7 @@ int pool_submit(void (*somefunction)(void *clinic_info), clinic_info_t *clinic_i
 
 	pinfo = register_details();
 
-	pthread_mutex_lock(&pool->mutex);
+	pthread_mutex_lock(&clinic_info->mutex);
 
 	if(clinic_info->wq->size == clinic_info->wq->capacity){
 		printf("Wait room is Full. Evicting low prios\n");
@@ -283,28 +284,23 @@ int pool_submit(void (*somefunction)(void *clinic_info), clinic_info_t *clinic_i
 		//sort_queue(&clinic_info->wq->list, cmp_by_code);
 	}
 
-	sem_post(&pool->semaphore);
-	pthread_mutex_unlock(&pool->mutex);
+	sem_post(&clinic_info->semaphore);
+	pthread_mutex_unlock(&clinic_info->mutex);
 	printf("pool submitted WQsize: %d CBQSize : %d\n", clinic_info->wq->size, clinic_info->cbq->size);
 	return 0;
 }
 
-int pool_init(clinic_info_t *clinicinfo)
+void pool_init(clinic_info_t *clinic_info)
 {
 	int j = 1;
-	pool = (struct threadpool*) malloc(sizeof(struct threadpool));
-	if(!pool)
-		return -ENOMEM;
 
-	pthread_mutex_init(&pool->mutex, NULL);
-	sem_init(&pool->semaphore, 0, NUMBER_OF_THREADS);
-	begin = time(NULL);
-	for (int i = 0; i < NUMBER_OF_THREADS; ++i) {
+	pthread_mutex_init(&clinic_info->mutex, NULL);
+	sem_init(&clinic_info->semaphore, 0, NUMBER_OF_THREADS);
+	//begin = time(NULL);
+	for (int i = 0; i < NUMBER_OF_THREADS; ++i)
 		pthread_create(&doctors, NULL, worker, (void *)j++);
-	}
-	printf("created threads successfully\n");
 
-	return 0;
+	printf("created threads successfully\n");
 }
 
 void pool_shutdown(void)
