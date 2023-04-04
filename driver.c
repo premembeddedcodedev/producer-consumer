@@ -7,9 +7,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <semaphore.h>
-#include "threadpool.h"
+#include "driver.h"
+#include "queue.h"
 #include "client.h"
 #include <pthread.h>
+#include "list/list.h"
+#include "hospitalexe/clinic.h"
+#include "hospitalexe/doctor.h"
+#include "hospitalexe/patient.h"
+
 struct task worktodo;
 struct threadpool *pool;
 time_t begin;
@@ -18,24 +24,6 @@ pthread_t doctors;
 int patient_id = 0;
 pthread_cond_t vip_request  = PTHREAD_COND_INITIALIZER;
 pthread_cond_t cbq_request  = PTHREAD_COND_INITIALIZER;
-
-int enqueue_front(Queue *Q, patients_info_t *pinfo, bool is_waitq)
-{
-	Queue* newQ;
-	if(Q->size == Q->capacity){
-		printf(" %s : Queue is Full. No element added.\n", (is_waitq ? "WQ": "CBQ"));
-		return -ENOMEM;
-	}
-	else{
-		Q->size++;
-		printf("number of elements in %s are : %d\n", (is_waitq ? "WQ": "CBQ"), Q->size);
-		newQ = (Queue*) malloc(sizeof(Queue));
-		newQ->pinfo = pinfo;
-		/* add to the list front */
-		list_add(&(newQ->list), &(Q->list));
-		return 0;
-	}
-}
 
 void enqueue_inpt_patient(clinic_info_t *clinic_info, patients_info_t *vacant)
 {
@@ -256,8 +244,7 @@ patients_info_t *dequeue_pos(clinic_info_t *clinic_info, int pos)
 	return NULL;
 }
 
-// multiple threads waiting for same vip_request which one will schedule
-/*a
+/*
  * Submits work to the pool.
  */
 int pool_submit(void (*somefunction)(void *clinic_info), clinic_info_t *clinic_info)
@@ -302,21 +289,22 @@ int pool_submit(void (*somefunction)(void *clinic_info), clinic_info_t *clinic_i
 	return 0;
 }
 
-void pool_init(clinic_info_t *clinicinfo)
+int pool_init(clinic_info_t *clinicinfo)
 {
 	int j = 1;
 	pool = (struct threadpool*) malloc(sizeof(struct threadpool));
-	pool->head = NULL;
-	pool->tail = NULL;
-	pool->timespan = 10;
+	if(!pool)
+		return -ENOMEM;
+
 	pthread_mutex_init(&pool->mutex, NULL);
-	pthread_mutex_init(&pool->cbmutex, NULL);
 	sem_init(&pool->semaphore, 0, NUMBER_OF_THREADS);
 	begin = time(NULL);
 	for (int i = 0; i < NUMBER_OF_THREADS; ++i) {
 		pthread_create(&doctors, NULL, worker, (void *)j++);
 	}
 	printf("created threads successfully\n");
+
+	return 0;
 }
 
 void pool_shutdown(void)
