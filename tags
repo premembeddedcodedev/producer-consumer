@@ -8,7 +8,6 @@
 clinic_info	client.c	/^clinic_info_t *clinic_info;$/;"	v	typeref:typename:clinic_info_t *
 print_list_data	client.c	/^void print_list_data(struct list_head *program_list)$/;"	f	typeref:typename:void
 calculate_diag_time	client.c	/^int calculate_diag_time(ailment_e diag_type)$/;"	f	typeref:typename:int
-cbfunc	client.c	/^void cbfunc(void *param)$/;"	f	typeref:typename:void
 register_patients	client.c	/^void *register_patients(void *param)$/;"	f	typeref:typename:void *
 process_leftover	client.c	/^void *process_leftover(void *param)$/;"	f	typeref:typename:void *
 getinstance	client.c	/^void *getinstance(void)$/;"	f	typeref:typename:void *
@@ -31,6 +30,11 @@ thread_id	client.h	/^	uint8_t thread_id;$/;"	m	struct:clinic_info	typeref:typena
 seq_id	client.h	/^	uint32_t seq_id;$/;"	m	struct:clinic_info	typeref:typename:uint32_t
 reception	client.h	/^	pthread_t reception;$/;"	m	struct:clinic_info	typeref:typename:pthread_t
 leftroom	client.h	/^	pthread_t leftroom;$/;"	m	struct:clinic_info	typeref:typename:pthread_t
+doctorpool	client.h	/^	pthread_t doctorpool;$/;"	m	struct:clinic_info	typeref:typename:pthread_t
+mutex	client.h	/^	pthread_mutex_t mutex;$/;"	m	struct:clinic_info	typeref:typename:pthread_mutex_t
+vip_request	client.h	/^	pthread_cond_t vip_request;$/;"	m	struct:clinic_info	typeref:typename:pthread_cond_t
+cbq_request	client.h	/^	pthread_cond_t cbq_request;$/;"	m	struct:clinic_info	typeref:typename:pthread_cond_t
+semaphore	client.h	/^	sem_t semaphore;$/;"	m	struct:clinic_info	typeref:typename:sem_t
 clinic_info_t	client.h	/^}clinic_info_t;$/;"	t	typeref:struct:clinic_info
 __COMMON_H__	common.h	/^#define __COMMON_H__$/;"	d
 WQMAX_ROOM_SIZE	common.h	/^#define WQMAX_ROOM_SIZE /;"	d
@@ -55,15 +59,9 @@ event_info	common.h	/^	patient_event_t event_info;$/;"	m	struct:patient_data	typ
 doctor_fb	common.h	/^	ptevt_feedback_t doctor_fb;$/;"	m	struct:patient_data	typeref:typename:ptevt_feedback_t
 list	common.h	/^	struct list_head list;$/;"	m	struct:patient_data	typeref:struct:list_head
 patients_info_t	common.h	/^}patients_info_t;$/;"	t	typeref:struct:patient_data
-worktodo	driver.c	/^struct task worktodo;$/;"	v	typeref:struct:task
-pool	driver.c	/^struct threadpool *pool;$/;"	v	typeref:struct:threadpool *
-begin	driver.c	/^time_t begin;$/;"	v	typeref:typename:time_t
-doctors	driver.c	/^pthread_t doctors;$/;"	v	typeref:typename:pthread_t
 patient_id	driver.c	/^int patient_id = 0;$/;"	v	typeref:typename:int
-vip_request	driver.c	/^pthread_cond_t vip_request  = PTHREAD_COND_INITIALIZER;$/;"	v	typeref:typename:pthread_cond_t
-cbq_request	driver.c	/^pthread_cond_t cbq_request  = PTHREAD_COND_INITIALIZER;$/;"	v	typeref:typename:pthread_cond_t
 enqueue_inpt_patient	driver.c	/^void enqueue_inpt_patient(clinic_info_t *clinic_info, patients_info_t *vacant)$/;"	f	typeref:typename:void
-wait_for_vip_timesignal	driver.c	/^void wait_for_vip_timesignal(clinic_info_t *clinic_info, patients_info_t *pinfo, int tid)$/;"	f	typeref:typename:void
+wait_for_vip_timesignal	driver.c	/^void wait_for_vip_timesignal(clinic_info_t *clinic_info, patients_info_t *pinfo,$/;"	f	typeref:typename:void
 specialist_generation	driver.c	/^bool specialist_generation(clinic_info_t *clinic_info, int tid)$/;"	f	typeref:typename:bool
 fill_doctor_details	driver.c	/^void fill_doctor_details(clinic_info_t *clinic_info, int tid)$/;"	f	typeref:typename:void
 worker	driver.c	/^void *worker(void *param)$/;"	f	typeref:typename:void *
@@ -72,21 +70,9 @@ find_min	driver.c	/^bool find_min(Queue *p, patients_info_t *pinfo, int *pos)$/;
 enqueue_cbq	driver.c	/^void enqueue_cbq(Queue *cbq, Queue *wq)$/;"	f	typeref:typename:void
 process_cbq	driver.c	/^int process_cbq(clinic_info_t *clinic_info)$/;"	f	typeref:typename:int
 dequeue_pos	driver.c	/^patients_info_t *dequeue_pos(clinic_info_t *clinic_info, int pos)$/;"	f	typeref:typename:patients_info_t *
-pool_submit	driver.c	/^int pool_submit(void (*somefunction)(void *clinic_info), clinic_info_t *clinic_info)$/;"	f	typeref:typename:int
-pool_init	driver.c	/^int pool_init(clinic_info_t *clinicinfo)$/;"	f	typeref:typename:int
-pool_shutdown	driver.c	/^void pool_shutdown(void)$/;"	f	typeref:typename:void
-task	driver.h	/^struct task$/;"	s
-function	driver.h	/^    void (*function)(void *p);$/;"	m	struct:task	typeref:typename:void (*)(void * p)
-data	driver.h	/^    void *data;$/;"	m	struct:task	typeref:typename:void *
-next	driver.h	/^    struct task *next;$/;"	m	struct:task	typeref:struct:task *
-task_id	driver.h	/^    int task_id; \/\/debug purpose$/;"	m	struct:task	typeref:typename:int
-threadpool	driver.h	/^struct threadpool$/;"	s
-head	driver.h	/^    struct task *head;$/;"	m	struct:threadpool	typeref:struct:task *
-tail	driver.h	/^    struct task *tail;$/;"	m	struct:threadpool	typeref:struct:task *
-mutex	driver.h	/^    pthread_mutex_t mutex;$/;"	m	struct:threadpool	typeref:typename:pthread_mutex_t
-cbmutex	driver.h	/^    pthread_mutex_t cbmutex;$/;"	m	struct:threadpool	typeref:typename:pthread_mutex_t
-semaphore	driver.h	/^    sem_t semaphore;$/;"	m	struct:threadpool	typeref:typename:sem_t
-timespan	driver.h	/^    int timespan;$/;"	m	struct:threadpool	typeref:typename:int
+q_process	driver.c	/^int q_process(clinic_info_t *clinic_info)$/;"	f	typeref:typename:int
+threads_init	driver.c	/^void threads_init(clinic_info_t *clinic_info)$/;"	f	typeref:typename:void
+threads_clean	driver.c	/^void threads_clean(clinic_info_t *clinic_info)$/;"	f	typeref:typename:void
 __CLINIC_H__	hospitalexe/clinic.h	/^#define __CLINIC_H__$/;"	d
 SPECIALIST_ID	hospitalexe/clinic.h	/^#define SPECIALIST_ID	/;"	d
 __anon07ba2da20103	hospitalexe/clinic.h	/^typedef enum {$/;"	g
@@ -283,6 +269,13 @@ next	sort_dll.c	/^	Node *next;$/;"	m	struct:List	typeref:typename:Node *	file:
 prev	sort_dll.c	/^	Node *prev;$/;"	m	struct:List	typeref:typename:Node *	file:
 List	sort_dll.c	/^} List;$/;"	t	typeref:struct:List	file:
 list_head	sort_dll.c	/^struct list_head {$/;"	s	file:
+next	sort_dll.c	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head *	file:
+prev	sort_dll.c	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head **	file:
+Node	sort_dll.c	/^typedef struct Node $/;"	s	file:
+person	sort_dll.c	/^	Person person;  $/;"	m	struct:Node	typeref:typename:Person	file:
+prev	sort_dll.c	/^	struct Node *prev;$/;"	m	struct:Node	typeref:struct:Node *	file:
+next	sort_dll.c	/^	struct Node *next;$/;"	m	struct:Node	typeref:struct:Node *	file:
+Node	sort_dll.c	/^} Node;$/;"	t	typeref:struct:Node	file:
 push_back	sort_dll.c	/^int push_back( List *list, const Person *person )$/;"	f	typeref:typename:int
 display	sort_dll.c	/^void display( const List *list )$/;"	f	typeref:typename:void
 swap	sort_dll.c	/^void swap( Node **current )  $/;"	f	typeref:typename:void

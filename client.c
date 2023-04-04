@@ -14,7 +14,8 @@ void print_list_data(struct list_head *program_list)
 
 	list_for_each_entry(p, program_list, list){
 		printf("\tailment: %d\t", p->pinfo->patient_reg_info.ailment);
-		printf("\tmembership: %d\n", p->pinfo->patient_reg_info.membership);
+		printf("\tmembership: %d\n",
+				p->pinfo->patient_reg_info.membership);
 	}
 }
 
@@ -62,7 +63,9 @@ void *register_patients(void *param)
 
 
 		while(check >= 1)  {
-			printf("Doctor %d: patients served: %d, interrupter: %d\n", check, clinic_info->dinfo[check].num_patients, clinic_info->dinfo[check].interrupt_count);
+			printf("Doctor %d: patients served: %d, interrupter: %d\n", check,
+					clinic_info->dinfo[check].num_patients,
+					clinic_info->dinfo[check].interrupt_count);
 			check--;
 		}
 		check = NUMBER_OF_THREADS;

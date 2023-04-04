@@ -25,11 +25,16 @@ typedef struct List
 	Node *prev;
 } List;
 
-//struct list_head {
 struct list_head {
-
-
+	struct list_head *next, *prev;
 };
+
+typedef struct Node 
+{
+	Person person;  
+	struct Node *prev;
+	struct Node *next;
+} Node;
 
 int push_back( List *list, const Person *person )
 {

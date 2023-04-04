@@ -1,7 +1,6 @@
 /**
  * Implementation of thread pool.
  */
-
 #include <string.h>
 #include <pthread.h>
 #include <stdlib.h>
@@ -45,7 +44,8 @@ void enqueue_inpt_patient(clinic_info_t *clinic_info, patients_info_t *vacant)
 	}
 }
 
-void wait_for_vip_timesignal(clinic_info_t *clinic_info, patients_info_t *pinfo, int tid)
+void wait_for_vip_timesignal(clinic_info_t *clinic_info, patients_info_t *pinfo,
+		int tid)
 {
 	struct timespec start, finish, ts;
 	struct timeval tv;
@@ -60,11 +60,13 @@ void wait_for_vip_timesignal(clinic_info_t *clinic_info, patients_info_t *pinfo,
 	ts.tv_sec += ts.tv_nsec / (1000 * 1000 * 1000);
 	ts.tv_nsec %= (1000 * 1000 * 1000);
 	clock_gettime(CLOCK_REALTIME, &start);
-	rc = pthread_cond_timedwait(&clinic_info->vip_request, &clinic_info->mutex, &ts);
+	rc = pthread_cond_timedwait(&clinic_info->vip_request,
+			&clinic_info->mutex, &ts);
 	clock_gettime(CLOCK_REALTIME, &finish);
 	if(rc == 0) {
 		clinic_info->dinfo[tid].interrupt_count++;
-		printf("Signalled properly: doctor: %d interpter count : %d\n", tid, clinic_info->dinfo[tid].interrupt_count);
+		printf("Signalled properly: doctor: %d interpter count : %d\n",
+				tid, clinic_info->dinfo[tid].interrupt_count);
 		elapsed = (finish.tv_sec - start.tv_sec);
 		elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
 		delaytime = (int) elapsed;
@@ -110,7 +112,9 @@ void *worker(void *param)
 		pthread_mutex_unlock(&clinic_info->mutex);
 		sem_post(&clinic_info->semaphore);
 
-		printf("Worker thread[%d] : Dq: ailment: %d, membership: %d\n", tid, pinfo->patient_reg_info.ailment, pinfo->patient_reg_info.membership);
+		printf("Worker thread[%d] : Dq: ailment: %d, membership: %d\n",
+				tid, pinfo->patient_reg_info.ailment,
+				pinfo->patient_reg_info.membership);
 
 		fill_doctor_details(clinic_info, tid);
 		clinic_info->dinfo[tid].patientid =  pinfo->patient_id;
@@ -119,10 +123,14 @@ void *worker(void *param)
 			clinic_info->dinfo[tid].num_patients++;
 			printf("in specialist consultation...\n");
 			sleep(pinfo->idle_time + 7);
-			//clinic_info->dinfo[tid].doc_deals_with_spec.patient_id = pinfo->patient_id;
-			//clinic_info->dinfo[tid].doc_deals_with_spec.ailment = pinfo->patient_reg_info.ailment;
-			//clinic_info->dinfo[tid].doc_deals_with_spec.apt_length = pinfo->idle_time + 7;
-		} else if(pinfo->patient_reg_info.membership == MEMBERSHIP_VIP) {
+			clinic_info->dinfo[tid].doc_deals_with_spec.\
+				patient_id = pinfo->patient_id;
+			clinic_info->dinfo[tid].doc_deals_with_spec.ailment\
+				= pinfo->patient_reg_info.ailment;
+			clinic_info->dinfo[tid].doc_deals_with_spec.apt_length\
+				= pinfo->idle_time + 7;
+		} else if(pinfo->patient_reg_info.membership
+				== MEMBERSHIP_VIP) {
 			clinic_info->dinfo[tid].num_patients++;
 			printf("VIP membership executing...\n");
 			sleep(pinfo->idle_time);
@@ -221,8 +229,10 @@ patients_info_t *dequeue_pos(clinic_info_t *clinic_info, int pos)
 
 	list_for_each_entry_safe(person, tmp, &clinic_info->wq->list, list) {
 		if(check == pos) {
-			//printf("\tvacant ailment: %d\n", person->pinfo->patient_reg_info.ailment);
-			//printf("\tvacant membership: %d\n", person->pinfo->patient_reg_info.membership);
+			//printf("\tvacant ailment: %d\n",\
+			person->pinfo->patient_reg_info.ailment);
+			//printf("\tvacant membership: %d\n", \
+			person->pinfo->patient_reg_info.membership);
 			vacant = person->pinfo;
 			list_del(&person->list);
 			free(person);
@@ -231,6 +241,37 @@ patients_info_t *dequeue_pos(clinic_info_t *clinic_info, int pos)
 		check++;
 	}
 	return NULL;
+}
+
+void swap(int *to, int* from)
+{
+	int temp;
+
+	temp = *from;
+	*from = *to;
+	*to = temp;
+}
+
+void sort_queue(struct list_head *program_list)
+{
+	Queue *p, *q;
+	struct list_head *new;
+
+	list_for_each_entry(p, program_list, list){
+		new = program_list->next;	
+		list_for_each_entry(q, new, list){
+			if(p->pinfo->patient_reg_info.ailment < q->pinfo->patient_reg_info.ailment) {
+				//swap(&p->pinfo->patient_reg_info.ailment, &q->pinfo->patient_reg_info.ailment);
+				printf("\tailment: %d\t", p->pinfo->patient_reg_info.ailment);
+				printf("\tmembership: %d\n",\
+						q->pinfo->patient_reg_info.membership);
+				printf("\tailment: %d\t", p->pinfo->patient_reg_info.ailment);
+				printf("\tmembership: %d\n",\
+						q->pinfo->patient_reg_info.membership);
+			}
+		}
+	}
+
 }
 
 /*
@@ -250,7 +291,8 @@ int q_process(clinic_info_t *clinic_info)
 
 	if(clinic_info->wq->size == clinic_info->wq->capacity){
 		printf("Wait room is Full. Evicting low prios\n");
-		bool min_find = find_min(clinic_info->wq, pinfo, &pos); // this requires when you have large buffer
+		// this requires when you have large buffer
+		bool min_find = find_min(clinic_info->wq, pinfo, &pos);
 		if(pinfo->patient_reg_info.membership == MEMBERSHIP_VIP) {
 			if(pthread_cond_broadcast(&clinic_info->vip_request) == 0) {
 				printf("signal successful from : %s\n", __func__);
@@ -258,9 +300,11 @@ int q_process(clinic_info_t *clinic_info)
 			} else {
 				if(min_find) {
 					printf("Found Min element in WQ nodes \n");
-					patients_info_t *temp = dequeue_pos(clinic_info, pos); //dq from LL from position
-					enqueue(clinic_info->wq, pinfo, true); //enqueue at last
-					enqueue(clinic_info->cbq, temp, false); //enqueue at last
+					//dq from LL from position
+					patients_info_t *temp = dequeue_pos(clinic_info, pos);
+					//enqueue at last
+					enqueue(clinic_info->wq, pinfo, true);
+					enqueue(clinic_info->cbq, temp, false);
 				} else
 					enqueue(clinic_info->cbq, pinfo, false);
 			}
@@ -269,7 +313,7 @@ int q_process(clinic_info_t *clinic_info)
 		}
 	} else {
 		enqueue(clinic_info->wq, pinfo, true);
-		//sort_queue(&clinic_info->wq->list, cmp_by_code);
+		//sort_queue(&clinic_info->wq->list);
 	}
 
 	sem_post(&clinic_info->semaphore);

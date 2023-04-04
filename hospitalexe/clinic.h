@@ -11,7 +11,6 @@
  */
 #define SPECIALIST_ID	(uint32_t)-1
 
-
 /*
  * Enumeration of ailments this clinic will treat.  A random ailment
  * should be selected when a patient first registers at reception.
