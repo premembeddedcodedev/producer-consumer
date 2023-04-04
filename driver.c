@@ -16,14 +16,7 @@
 #include "hospitalexe/doctor.h"
 #include "hospitalexe/patient.h"
 
-struct task worktodo;
-struct threadpool *pool;
-time_t begin;
-
-pthread_t doctors;
 int patient_id = 0;
-pthread_cond_t vip_request  = PTHREAD_COND_INITIALIZER;
-pthread_cond_t cbq_request  = PTHREAD_COND_INITIALIZER;
 
 void enqueue_inpt_patient(clinic_info_t *clinic_info, patients_info_t *vacant)
 {
@@ -67,7 +60,7 @@ void wait_for_vip_timesignal(clinic_info_t *clinic_info, patients_info_t *pinfo,
 	ts.tv_sec += ts.tv_nsec / (1000 * 1000 * 1000);
 	ts.tv_nsec %= (1000 * 1000 * 1000);
 	clock_gettime(CLOCK_REALTIME, &start);
-	rc = pthread_cond_timedwait(&vip_request, &clinic_info->mutex, &ts);
+	rc = pthread_cond_timedwait(&clinic_info->vip_request, &clinic_info->mutex, &ts);
 	clock_gettime(CLOCK_REALTIME, &finish);
 	if(rc == 0) {
 		clinic_info->dinfo[tid].interrupt_count++;
@@ -109,7 +102,7 @@ void *worker(void *param)
 		clinic_info_t *clinic_info = (clinic_info_t *)getinstance();
 		patients_info_t *pinfo = dequeue(clinic_info->wq, true);
 		if(!pinfo) {
-			pthread_cond_broadcast(&cbq_request);
+			pthread_cond_broadcast(&clinic_info->cbq_request);
 			pthread_mutex_unlock(&clinic_info->mutex);
 			sem_post(&clinic_info->semaphore);
 			continue;
@@ -167,20 +160,15 @@ patients_info_t *register_details(void)
 bool find_min(Queue *p, patients_info_t *pinfo, int *pos)
 {
 	Queue  *tmp;
-	//skip_q intpt_min;
 	bool found = false;
 	int iteration = 0;
 
-	//memset(&intpt_min, 0, sizeof(skip_q)); //Redundant
-
 	int find_min = pinfo->patient_reg_info.membership;
-	//void *ptr = pinfo;
 
 	list_for_each_entry(tmp, &p->list, list){
 		iteration++;
 		if(find_min < tmp->pinfo->patient_reg_info.membership) {
 			find_min = tmp->pinfo->patient_reg_info.membership;
-			//ptr = tmp->pinfo;
 			found = true;	
 			*pos = iteration;
 		}
@@ -206,7 +194,7 @@ int process_cbq(clinic_info_t *clinic_info)
 	int rc = 0;
 
 	pthread_mutex_lock(&clinic_info->mutex);
-	rc = pthread_cond_wait(&cbq_request, &clinic_info->mutex);
+	rc = pthread_cond_wait(&clinic_info->cbq_request, &clinic_info->mutex);
 
 	if(rc == 0) {
 		if(clinic_info->cbq->size > 0) {
@@ -248,7 +236,7 @@ patients_info_t *dequeue_pos(clinic_info_t *clinic_info, int pos)
 /*
  * Submits work to the pool.
  */
-int pool_submit(void (*somefunction)(void *clinic_info), clinic_info_t *clinic_info)
+int q_process(clinic_info_t *clinic_info)
 {
 	patients_info_t *pinfo;
 
@@ -264,7 +252,7 @@ int pool_submit(void (*somefunction)(void *clinic_info), clinic_info_t *clinic_i
 		printf("Wait room is Full. Evicting low prios\n");
 		bool min_find = find_min(clinic_info->wq, pinfo, &pos); // this requires when you have large buffer
 		if(pinfo->patient_reg_info.membership == MEMBERSHIP_VIP) {
-			if(pthread_cond_broadcast(&vip_request) == 0) {
+			if(pthread_cond_broadcast(&clinic_info->vip_request) == 0) {
 				printf("signal successful from : %s\n", __func__);
 				enqueue_front(clinic_info->cbq, pinfo, false);
 			} else {
@@ -290,22 +278,39 @@ int pool_submit(void (*somefunction)(void *clinic_info), clinic_info_t *clinic_i
 	return 0;
 }
 
-void pool_init(clinic_info_t *clinic_info)
+void threads_init(clinic_info_t *clinic_info)
 {
 	int j = 1;
 
 	pthread_mutex_init(&clinic_info->mutex, NULL);
 	sem_init(&clinic_info->semaphore, 0, NUMBER_OF_THREADS);
-	//begin = time(NULL);
 	for (int i = 0; i < NUMBER_OF_THREADS; ++i)
-		pthread_create(&doctors, NULL, worker, (void *)j++);
+		pthread_create(&clinic_info->doctorpool, NULL, worker, (void *)j++);
+
+	if (pthread_cond_init(&clinic_info->vip_request, NULL) != 0) {
+		perror("pthread_cond_init() error");
+		exit(1);
+	}
+
+	if (pthread_cond_init(&clinic_info->cbq_request, NULL) != 0) {
+		perror("pthread_cond_init() error");
+		exit(1);
+	}
 
 	printf("created threads successfully\n");
 }
 
-void pool_shutdown(void)
+void threads_clean(clinic_info_t *clinic_info)
 {
-	pthread_cond_destroy(&vip_request);
-	pthread_join(doctors,NULL);
+	if (pthread_cond_destroy(&clinic_info->vip_request) != 0) {                                       
+		perror("pthread_cond_destroy() vip error");                                     
+		exit(2);                                                                    
+	}       
+
+	if (pthread_cond_destroy(&clinic_info->cbq_request) != 0) {
+		perror("pthread_cond_destroy() cbq error");
+		exit(2);
+	}
+	pthread_join(clinic_info->doctorpool,NULL);
 	if (DEBUG) printf("End of execution :)\n");
 }

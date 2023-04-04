@@ -37,7 +37,10 @@ typedef struct clinic_info {
 	uint32_t seq_id;
 	pthread_t reception;
 	pthread_t leftroom;
+	pthread_t doctorpool;
 	pthread_mutex_t mutex;
+	pthread_cond_t vip_request;//  = PTHREAD_COND_INITIALIZER;
+	pthread_cond_t cbq_request;// = PTHREAD_COND_INITIALIZER;
 	sem_t semaphore;
 }clinic_info_t;
 

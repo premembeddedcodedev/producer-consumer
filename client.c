@@ -45,11 +45,6 @@ int calculate_diag_time(ailment_e diag_type)
 	return value;
 }
 
-void cbfunc(void *param)
-{
-	printf("Enter into %s\n", __func__);
-}
-
 void *register_patients(void *param)
 {
 	int val = 0, check = NUMBER_OF_THREADS;
@@ -59,7 +54,7 @@ void *register_patients(void *param)
 		val = (rand() % 6) + 4;
 		printf("\n\n************ Patient is about to enter after @(%ds) time....\n", val);
 		sleep(val);
-		pool_submit(cbfunc, clinic_info);
+		q_process(clinic_info);
 		//printf("WQ Data:\n");
 		//print_list_data(&clinic_info->wq->list);
 		//printf("CBQ Data:\n");
@@ -106,7 +101,7 @@ int main()
 	clinic_info->cbq  = initQueue(CBQMAX_ROOM_SIZE);
 
 	printf("main %p : %p\n", clinic_info->wq, clinic_info->cbq);
-	pool_init(clinic_info);
+	threads_init(clinic_info);
 
 	pthread_create(&clinic_info->reception, NULL, register_patients, (void *) clinic_info);
 	pthread_create(&clinic_info->leftroom, NULL, process_leftover, (void *) clinic_info);
@@ -114,7 +109,7 @@ int main()
 	//TODO: Create threads here to add the data into below queues
 
 	sleep(1);
-	pool_shutdown();
+	threads_clean(clinic_info);
 
 	//TODO: [PV] Need to cleanup memory
 
