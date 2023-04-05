@@ -132,7 +132,7 @@ void *doctor_process(void *param)
 			pthread_mutex_unlock(&clinic_info->mutex);
 			sem_post(&clinic_info->semaphore);
 			pthread_exit(0);
-			return;	
+			break;
 		}
 		pthread_mutex_unlock(&clinic_info->mutex);
 		sem_post(&clinic_info->semaphore);
@@ -370,11 +370,7 @@ int q_process(clinic_info_t *clinic_info)
 void threads_init(clinic_info_t *clinic_info)
 {
 	int j = 1;
-#if 0
-	clinic_info->thread_num = (int *) malloc(sizeof(int));
-	if(!clinic_info->thread_num)
-		return;
-#endif
+	
 	printf("Address of thread_num: %p\n", clinic_info->thread_num);
 
 	clinic_info->thread_num[0] = 1;
@@ -383,7 +379,7 @@ void threads_init(clinic_info_t *clinic_info)
 	sem_init(&clinic_info->semaphore, 0, NUMBER_OF_THREADS);
 
 	for (int i = 0; i < NUMBER_OF_THREADS; ++i) {
-		clinic_info->thread_num[i] = j;;
+		clinic_info->thread_num[i] = j;
 		pthread_create(&clinic_info->doctorpool[j], NULL, doctor_process,
 				(void *) &clinic_info->thread_num[i]);
 		printf("Created %d thread successfully\n", clinic_info->thread_num[i]);
