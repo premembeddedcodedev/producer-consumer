@@ -36,4 +36,10 @@ typedef struct patient_data {
 	struct list_head list;
 }patients_info_t;
 
+#ifdef DEBUG
+#define pr_debug(fmt, ...) { }
+#elif defined(DEBUG)
+#define pr_debug(fmt, ...) \
+	printf(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+#endif
 #endif

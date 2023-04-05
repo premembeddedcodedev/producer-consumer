@@ -5,283 +5,247 @@
 !_TAG_PROGRAM_URL	https://ctags.io/	/official site/
 !_TAG_PROGRAM_VERSION	0.0.0	//
 !_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
-clinic_info	client.c	/^clinic_info_t *clinic_info;$/;"	v	typeref:typename:clinic_info_t *
-print_list_data	client.c	/^void print_list_data(struct list_head *program_list)$/;"	f	typeref:typename:void
-calculate_diag_time	client.c	/^int calculate_diag_time(ailment_e diag_type)$/;"	f	typeref:typename:int
-register_patients	client.c	/^void *register_patients(void *param)$/;"	f	typeref:typename:void *
-process_leftover	client.c	/^void *process_leftover(void *param)$/;"	f	typeref:typename:void *
-getinstance	client.c	/^void *getinstance(void)$/;"	f	typeref:typename:void *
 main	client.c	/^int main()$/;"	f	typeref:typename:int
-__CLIENT_H__	client.h	/^#define __CLIENT_H__$/;"	d
-TRUE	client.h	/^#define TRUE /;"	d
-DEBUG	client.h	/^#define DEBUG /;"	d
-RECEPTIONTID	client.h	/^#define RECEPTIONTID /;"	d
-CBQTID	client.h	/^#define CBQTID /;"	d
-low_prio	client.h	/^typedef struct low_prio {$/;"	s
-find_min	client.h	/^	int find_min;$/;"	m	struct:low_prio	typeref:typename:int
-ptr	client.h	/^	void *ptr;$/;"	m	struct:low_prio	typeref:typename:void *
-skip_q	client.h	/^}skip_q;$/;"	t	typeref:struct:low_prio
-clinic_info	client.h	/^typedef struct clinic_info {$/;"	s
-pinfo	client.h	/^	patients_info_t pinfo;$/;"	m	struct:clinic_info	typeref:typename:patients_info_t
-dinfo	client.h	/^	doctor_info_t dinfo[NUMBER_OF_THREADS + 1];$/;"	m	struct:clinic_info	typeref:typename:doctor_info_t[]
-wq	client.h	/^	Queue *wq;$/;"	m	struct:clinic_info	typeref:typename:Queue *
-cbq	client.h	/^	Queue *cbq;$/;"	m	struct:clinic_info	typeref:typename:Queue *
-thread_id	client.h	/^	uint8_t thread_id;$/;"	m	struct:clinic_info	typeref:typename:uint8_t
-seq_id	client.h	/^	uint32_t seq_id;$/;"	m	struct:clinic_info	typeref:typename:uint32_t
-reception	client.h	/^	pthread_t reception;$/;"	m	struct:clinic_info	typeref:typename:pthread_t
-leftroom	client.h	/^	pthread_t leftroom;$/;"	m	struct:clinic_info	typeref:typename:pthread_t
-doctorpool	client.h	/^	pthread_t doctorpool;$/;"	m	struct:clinic_info	typeref:typename:pthread_t
-mutex	client.h	/^	pthread_mutex_t mutex;$/;"	m	struct:clinic_info	typeref:typename:pthread_mutex_t
-vip_request	client.h	/^	pthread_cond_t vip_request;$/;"	m	struct:clinic_info	typeref:typename:pthread_cond_t
-cbq_request	client.h	/^	pthread_cond_t cbq_request;$/;"	m	struct:clinic_info	typeref:typename:pthread_cond_t
-semaphore	client.h	/^	sem_t semaphore;$/;"	m	struct:clinic_info	typeref:typename:sem_t
-clinic_info_t	client.h	/^}clinic_info_t;$/;"	t	typeref:struct:clinic_info
-__COMMON_H__	common.h	/^#define __COMMON_H__$/;"	d
-WQMAX_ROOM_SIZE	common.h	/^#define WQMAX_ROOM_SIZE /;"	d
-CBQMAX_ROOM_SIZE	common.h	/^#define CBQMAX_ROOM_SIZE /;"	d
-NUMBER_OF_THREADS	common.h	/^#define NUMBER_OF_THREADS /;"	d
-doctor_info	common.h	/^typedef struct doctor_info {$/;"	s
-doc_deals_with_spec	common.h	/^	drevt_aptmt_t doc_deals_with_spec;$/;"	m	struct:doctor_info	typeref:typename:drevt_aptmt_t
-doc_events	common.h	/^	doctor_event_t doc_events;$/;"	m	struct:doctor_info	typeref:typename:doctor_event_t
-interrupter_details	common.h	/^	ptevt_intr_t interrupter_details;$/;"	m	struct:doctor_info	typeref:typename:ptevt_intr_t
-num_patients	common.h	/^	int num_patients;$/;"	m	struct:doctor_info	typeref:typename:int
-doctorid	common.h	/^	int doctorid;$/;"	m	struct:doctor_info	typeref:typename:int
-patientid	common.h	/^	int patientid;$/;"	m	struct:doctor_info	typeref:typename:int
-interrupt_count	common.h	/^	int interrupt_count;$/;"	m	struct:doctor_info	typeref:typename:int
-doctor_info_t	common.h	/^}doctor_info_t;$/;"	t	typeref:struct:doctor_info
-patient_data	common.h	/^typedef struct patient_data {$/;"	s
-patient_id	common.h	/^	int patient_id;$/;"	m	struct:patient_data	typeref:typename:int
-idle_time	common.h	/^	int idle_time;$/;"	m	struct:patient_data	typeref:typename:int
-interrupted	common.h	/^	bool interrupted;$/;"	m	struct:patient_data	typeref:typename:bool
-patient_reg_info	common.h	/^	ptevt_register_t patient_reg_info;$/;"	m	struct:patient_data	typeref:typename:ptevt_register_t
-doctor_info	common.h	/^	ptevt_dr_t doctor_info;$/;"	m	struct:patient_data	typeref:typename:ptevt_dr_t
-event_info	common.h	/^	patient_event_t event_info;$/;"	m	struct:patient_data	typeref:typename:patient_event_t
-doctor_fb	common.h	/^	ptevt_feedback_t doctor_fb;$/;"	m	struct:patient_data	typeref:typename:ptevt_feedback_t
-list	common.h	/^	struct list_head list;$/;"	m	struct:patient_data	typeref:struct:list_head
-patients_info_t	common.h	/^}patients_info_t;$/;"	t	typeref:struct:patient_data
-patient_id	driver.c	/^int patient_id = 0;$/;"	v	typeref:typename:int
+g_patient_id	driver.c	/^int g_patient_id = 0;$/;"	v	typeref:typename:int
+g_clinic_info	driver.c	/^clinic_info_t *g_clinic_info;$/;"	v	typeref:typename:clinic_info_t *
+getinstance	driver.c	/^void *getinstance(void)$/;"	f	typeref:typename:void *
 enqueue_inpt_patient	driver.c	/^void enqueue_inpt_patient(clinic_info_t *clinic_info, patients_info_t *vacant)$/;"	f	typeref:typename:void
 wait_for_vip_timesignal	driver.c	/^void wait_for_vip_timesignal(clinic_info_t *clinic_info, patients_info_t *pinfo,$/;"	f	typeref:typename:void
 specialist_generation	driver.c	/^bool specialist_generation(clinic_info_t *clinic_info, int tid)$/;"	f	typeref:typename:bool
-fill_doctor_details	driver.c	/^void fill_doctor_details(clinic_info_t *clinic_info, int tid)$/;"	f	typeref:typename:void
-worker	driver.c	/^void *worker(void *param)$/;"	f	typeref:typename:void *
+fill_doctor_details	driver.c	/^void fill_doctor_details(clinic_info_t *clinic_info, int tid, patients_info_t *pinfo)$/;"	f	typeref:typename:void
+fill_interrupter_details	driver.c	/^void fill_interrupter_details(clinic_info_t *clinic_info, int tid, patients_info_t *pinfo)$/;"	f	typeref:typename:void
+is_doctor_max_patients_exceeded	driver.c	/^bool is_doctor_max_patients_exceeded(clinic_info_t *clinic_info, int tid)$/;"	f	typeref:typename:bool
+doctor_process	driver.c	/^void *doctor_process(void *param)$/;"	f	typeref:typename:void *
 register_details	driver.c	/^patients_info_t *register_details(void)$/;"	f	typeref:typename:patients_info_t *
 find_min	driver.c	/^bool find_min(Queue *p, patients_info_t *pinfo, int *pos)$/;"	f	typeref:typename:bool
 enqueue_cbq	driver.c	/^void enqueue_cbq(Queue *cbq, Queue *wq)$/;"	f	typeref:typename:void
 process_cbq	driver.c	/^int process_cbq(clinic_info_t *clinic_info)$/;"	f	typeref:typename:int
 dequeue_pos	driver.c	/^patients_info_t *dequeue_pos(clinic_info_t *clinic_info, int pos)$/;"	f	typeref:typename:patients_info_t *
+find_min_ptr	driver.c	/^patients_info_t *find_min_ptr(Queue *p, patients_info_t *pinfo)$/;"	f	typeref:typename:patients_info_t *
 q_process	driver.c	/^int q_process(clinic_info_t *clinic_info)$/;"	f	typeref:typename:int
+calculate_diag_time	driver.c	/^int calculate_diag_time(ailment_e diag_type)$/;"	f	typeref:typename:int
+register_patients	driver.c	/^void *register_patients(void *param)$/;"	f	typeref:typename:void *
+process_cbqleftover	driver.c	/^void *process_cbqleftover(void *param)$/;"	f	typeref:typename:void *
 threads_init	driver.c	/^void threads_init(clinic_info_t *clinic_info)$/;"	f	typeref:typename:void
 threads_clean	driver.c	/^void threads_clean(clinic_info_t *clinic_info)$/;"	f	typeref:typename:void
-__CLINIC_H__	hospitalexe/clinic.h	/^#define __CLINIC_H__$/;"	d
-SPECIALIST_ID	hospitalexe/clinic.h	/^#define SPECIALIST_ID	/;"	d
-__anon07ba2da20103	hospitalexe/clinic.h	/^typedef enum {$/;"	g
-AIL_NONE	hospitalexe/clinic.h	/^	AIL_NONE = 0,              \/* Default, shouldn't bet set *\/$/;"	e	enum:__anon07ba2da20103
-AIL_CHECKUP	hospitalexe/clinic.h	/^	AIL_CHECKUP,               \/* Takes 12 units of time *\/$/;"	e	enum:__anon07ba2da20103
-AIL_GENERAL_MALAISE	hospitalexe/clinic.h	/^	AIL_GENERAL_MALAISE,       \/* Takes 10 units of time *\/$/;"	e	enum:__anon07ba2da20103
-AIL_FEVER	hospitalexe/clinic.h	/^	AIL_FEVER,                 \/* Takes 8 units of time *\/$/;"	e	enum:__anon07ba2da20103
-AIL_PHYSICAL_INJURY	hospitalexe/clinic.h	/^	AIL_PHYSICAL_INJURY,       \/* Takes 6 units of time *\/$/;"	e	enum:__anon07ba2da20103
-AIL_OTHER	hospitalexe/clinic.h	/^	AIL_OTHER,                 \/* Takes 4 units of time *\/$/;"	e	enum:__anon07ba2da20103
-AIL_COUNT	hospitalexe/clinic.h	/^	AIL_COUNT                  \/* Sentinel, ignore *\/$/;"	e	enum:__anon07ba2da20103
-ailment_e	hospitalexe/clinic.h	/^} ailment_e;$/;"	t	typeref:enum:__anon07ba2da20103
-__anon07ba2da20203	hospitalexe/clinic.h	/^typedef enum {$/;"	g
-MEMBERSHIP_NONE	hospitalexe/clinic.h	/^	MEMBERSHIP_NONE = 0,        \/* Default, shouldn't be set *\/$/;"	e	enum:__anon07ba2da20203
-MEMBERSHIP_SILVER	hospitalexe/clinic.h	/^	MEMBERSHIP_SILVER,          \/* Silver membership has a prioroity of 1 *\/$/;"	e	enum:__anon07ba2da20203
-MEMBERSHIP_GOLD	hospitalexe/clinic.h	/^	MEMBERSHIP_GOLD,            \/* Gold membership has a priority of 2 *\/$/;"	e	enum:__anon07ba2da20203
-MEMBERSHIP_PLATINUM	hospitalexe/clinic.h	/^	MEMBERSHIP_PLATINUM,        \/* Platinum membership has a priority of 3 *\/$/;"	e	enum:__anon07ba2da20203
-MEMBERSHIP_VIP	hospitalexe/clinic.h	/^	MEMBERSHIP_VIP,             \/* VIP membership has a priority of 4 *\/$/;"	e	enum:__anon07ba2da20203
-membership_e	hospitalexe/clinic.h	/^} membership_e;$/;"	t	typeref:enum:__anon07ba2da20203
-__DOCTOR_H__	hospitalexe/doctor.h	/^#define __DOCTOR_H__$/;"	d
-__anoncd5be21b0103	hospitalexe/doctor.h	/^typedef enum {$/;"	g
-DREVT_NONE	hospitalexe/doctor.h	/^	DREVT_NONE = 0,$/;"	e	enum:__anoncd5be21b0103
-DREVT_SHIFTSTART	hospitalexe/doctor.h	/^	DREVT_SHIFTSTART,        \/* None:             Doctor's day is starting *\/$/;"	e	enum:__anoncd5be21b0103
-DREVT_SHIFTEND	hospitalexe/doctor.h	/^	DREVT_SHIFTEND,          \/* None:             Doctor's day is ending *\/$/;"	e	enum:__anoncd5be21b0103
-DREVT_WAITING	hospitalexe/doctor.h	/^	DREVT_WAITING,           \/* drevt_status_t:   Doctor is idle as no patients are available to t/;"	e	enum:__anoncd5be21b0103
-DREVT_WOKENUP	hospitalexe/doctor.h	/^	DREVT_WOKENUP,           \/* drevt_status_t:   Doctor is woken up by a patient who needs treati/;"	e	enum:__anoncd5be21b0103
-DREVT_TREATSTART	hospitalexe/doctor.h	/^	DREVT_TREATSTART,        \/* drevt_aptmt_t:    Doctor is starting an appointment *\/$/;"	e	enum:__anoncd5be21b0103
-DREVT_TREATEND	hospitalexe/doctor.h	/^	DREVT_TREATEND,          \/* drevt aptmt_t:    Doctor is ending the appointment *\/$/;"	e	enum:__anoncd5be21b0103
-DREVT_SPECIALSTART	hospitalexe/doctor.h	/^        DREVT_SPECIALSTART,      \/* drevt_aptmt_t:    Doctor is calling the specialist *\/$/;"	e	enum:__anoncd5be21b0103
-DREVT_SPECIALEND	hospitalexe/doctor.h	/^        DREVT_SPECIALEND,        \/* drevt_aptmt_t:    Doctor is done consulting with the specia/;"	e	enum:__anoncd5be21b0103
-DREVT_COUNT	hospitalexe/doctor.h	/^	DREVT_COUNT,             \/* Sentinel value, not used *\/$/;"	e	enum:__anoncd5be21b0103
-dr_event_e	hospitalexe/doctor.h	/^} dr_event_e;$/;"	t	typeref:enum:__anoncd5be21b0103
-drevt_status_s	hospitalexe/doctor.h	/^typedef struct drevt_status_s {$/;"	s
-patient_id	hospitalexe/doctor.h	/^	uint32_t        patient_id;$/;"	m	struct:drevt_status_s	typeref:typename:uint32_t
-patients_treated	hospitalexe/doctor.h	/^	uint32_t        patients_treated;$/;"	m	struct:drevt_status_s	typeref:typename:uint32_t
-idle_count	hospitalexe/doctor.h	/^	uint32_t        idle_count;$/;"	m	struct:drevt_status_s	typeref:typename:uint32_t
-idle_time	hospitalexe/doctor.h	/^	uint32_t        idle_time;$/;"	m	struct:drevt_status_s	typeref:typename:uint32_t
-drevt_status_t	hospitalexe/doctor.h	/^} drevt_status_t;$/;"	t	typeref:struct:drevt_status_s
-drevt_aptmt_s	hospitalexe/doctor.h	/^typedef struct drevt_aptmt_s {$/;"	s
-patient_id	hospitalexe/doctor.h	/^	uint32_t       patient_id;$/;"	m	struct:drevt_aptmt_s	typeref:typename:uint32_t
-specialist_id	hospitalexe/doctor.h	/^	uint32_t       specialist_id;$/;"	m	struct:drevt_aptmt_s	typeref:typename:uint32_t
-apt_length	hospitalexe/doctor.h	/^	uint32_t       apt_length;$/;"	m	struct:drevt_aptmt_s	typeref:typename:uint32_t
-ailment	hospitalexe/doctor.h	/^	ailment_e      ailment;$/;"	m	struct:drevt_aptmt_s	typeref:typename:ailment_e
-drevt_aptmt_t	hospitalexe/doctor.h	/^} drevt_aptmt_t;$/;"	t	typeref:struct:drevt_aptmt_s
-doctor_event_s	hospitalexe/doctor.h	/^typedef struct doctor_event_s {$/;"	s
-timestamp	hospitalexe/doctor.h	/^	struct timespec    timestamp;$/;"	m	struct:doctor_event_s	typeref:struct:timespec
-type	hospitalexe/doctor.h	/^	dr_event_e         type;$/;"	m	struct:doctor_event_s	typeref:typename:dr_event_e
-__anoncd5be21b020a	hospitalexe/doctor.h	/^	union {$/;"	u	struct:doctor_event_s
-status	hospitalexe/doctor.h	/^		drevt_status_t    status;$/;"	m	union:doctor_event_s::__anoncd5be21b020a	typeref:typename:drevt_status_t
-aptmt	hospitalexe/doctor.h	/^		drevt_aptmt_t     aptmt;$/;"	m	union:doctor_event_s::__anoncd5be21b020a	typeref:typename:drevt_aptmt_t
-doctor_event_t	hospitalexe/doctor.h	/^} doctor_event_t;$/;"	t	typeref:struct:doctor_event_s
-__PATIENT_H__	hospitalexe/patient.h	/^#define __PATIENT_H__$/;"	d
-__anon055313450103	hospitalexe/patient.h	/^typedef enum {$/;"	g
-PTEVT_NONE	hospitalexe/patient.h	/^	PTEVT_NONE = 0,$/;"	e	enum:__anon055313450103
-PTEVT_CLINIC_ARRIVAL	hospitalexe/patient.h	/^	PTEVT_CLINIC_ARRIVAL,        \/* ptevt_register_t: patient arrives at the clinic (includes retu/;"	e	enum:__anon055313450103
-PTEVT_CLINIC_DEPARTURE	hospitalexe/patient.h	/^	PTEVT_CLINIC_DEPARTURE,      \/* ptevt_register_t: patient leaves the clinic (including tempora/;"	e	enum:__anon055313450103
-PTEVT_WAITROOM_ARRIVAL	hospitalexe/patient.h	/^	PTEVT_WAITROOM_ARRIVAL,      \/* None:             patient sits in waiting room *\/$/;"	e	enum:__anon055313450103
-PTEVT_WAITROOM_DEPARTURE	hospitalexe/patient.h	/^	PTEVT_WAITROOM_DEPARTURE,    \/* None:             patient leaves waiting room *\/$/;"	e	enum:__anon055313450103
-PTEVT_DOCTOR_TREATSTART	hospitalexe/patient.h	/^	PTEVT_DOCTOR_TREATSTART,     \/* ptevt_dr_t:       doctor starts or resumes treating a patient /;"	e	enum:__anon055313450103
-PTEVT_DOCTOR_TREATSTOP	hospitalexe/patient.h	/^	PTEVT_DOCTOR_TREATSTOP,      \/* ptevt_dr_t:       doctor is finished treating a patient *\/$/;"	e	enum:__anon055313450103
-PTEVT_SPECIALIST_TREATSTART	hospitalexe/patient.h	/^	PTEVT_SPECIALIST_TREATSTART, \/* ptevt_dr_t:       specialist starts treating a patient *\/$/;"	e	enum:__anon055313450103
-PTEVT_SPECIALIST_TREATSTOP	hospitalexe/patient.h	/^	PTEVT_SPECIALIST_TREATSTOP,  \/* ptevt_dr_t:       specialist is finished treating a patient *\/$/;"	e	enum:__anon055313450103
-PTEVT_APT_INTRREQUEST	hospitalexe/patient.h	/^        PTEVT_APT_INTRREQUEST,       \/* ptevt_intr_t:     a VIP patient tried to interrupt a pa/;"	e	enum:__anon055313450103
-PTEVT_WAITLIST_ADDED	hospitalexe/patient.h	/^	PTEVT_WAITLIST_ADDED,        \/* None:             patient is added to the callback waitlist *\/$/;"	e	enum:__anon055313450103
-PTEVT_WAITLIST_REMOVED	hospitalexe/patient.h	/^	PTEVT_WAITLIST_REMOVED,      \/* None:             patient is removed from the callback waitlis/;"	e	enum:__anon055313450103
-PTEVT_FEEBACK	hospitalexe/patient.h	/^	PTEVT_FEEBACK,               \/* ptevt_feedback_t  feedback was provided by a patient at the en/;"	e	enum:__anon055313450103
-PTEVT_COUNT	hospitalexe/patient.h	/^	PTEVT_COUNT,                 \/* Sentinel value, not used *\/$/;"	e	enum:__anon055313450103
-pt_event_e	hospitalexe/patient.h	/^} pt_event_e;$/;"	t	typeref:enum:__anon055313450103
-ptevt_register_s	hospitalexe/patient.h	/^typedef struct ptevt_register_s {$/;"	s
-ailment	hospitalexe/patient.h	/^	ailment_e      ailment;$/;"	m	struct:ptevt_register_s	typeref:typename:ailment_e
-membership	hospitalexe/patient.h	/^	membership_e   membership;$/;"	m	struct:ptevt_register_s	typeref:typename:membership_e
-apt_length	hospitalexe/patient.h	/^	uint32_t       apt_length;$/;"	m	struct:ptevt_register_s	typeref:typename:uint32_t
-ptevt_register_t	hospitalexe/patient.h	/^} ptevt_register_t;$/;"	t	typeref:struct:ptevt_register_s
-ptevt_dr_s	hospitalexe/patient.h	/^typedef struct ptevt_dr_s {$/;"	s
-doctor_id	hospitalexe/patient.h	/^	uint32_t       doctor_id;$/;"	m	struct:ptevt_dr_s	typeref:typename:uint32_t
-time_remaining	hospitalexe/patient.h	/^	uint32_t       time_remaining;$/;"	m	struct:ptevt_dr_s	typeref:typename:uint32_t
-ptevt_dr_t	hospitalexe/patient.h	/^} ptevt_dr_t;$/;"	t	typeref:struct:ptevt_dr_s
-ptevt_intr_s	hospitalexe/patient.h	/^typedef struct ptevt_intr_s {$/;"	s
-interrupter_id	hospitalexe/patient.h	/^	uint32_t       interrupter_id;$/;"	m	struct:ptevt_intr_s	typeref:typename:uint32_t
-time_remaining	hospitalexe/patient.h	/^	uint32_t       time_remaining;$/;"	m	struct:ptevt_intr_s	typeref:typename:uint32_t
-membership	hospitalexe/patient.h	/^	membership_e   membership;$/;"	m	struct:ptevt_intr_s	typeref:typename:membership_e
-interrupted	hospitalexe/patient.h	/^	bool           interrupted;$/;"	m	struct:ptevt_intr_s	typeref:typename:bool
-ptevt_intr_t	hospitalexe/patient.h	/^} ptevt_intr_t;$/;"	t	typeref:struct:ptevt_intr_s
-ptevt_feedback_s	hospitalexe/patient.h	/^typedef struct ptevt_feedback_s {$/;"	s
-doctor_id	hospitalexe/patient.h	/^	uint32_t       doctor_id;$/;"	m	struct:ptevt_feedback_s	typeref:typename:uint32_t
-doctor_rating	hospitalexe/patient.h	/^	uint32_t       doctor_rating;$/;"	m	struct:ptevt_feedback_s	typeref:typename:uint32_t
-ptevt_feedback_t	hospitalexe/patient.h	/^} ptevt_feedback_t;$/;"	t	typeref:struct:ptevt_feedback_s
-patient_event_s	hospitalexe/patient.h	/^typedef struct patient_event_s {$/;"	s
-timestamp	hospitalexe/patient.h	/^	struct timespec    timestamp;$/;"	m	struct:patient_event_s	typeref:struct:timespec
-type	hospitalexe/patient.h	/^	pt_event_e         type;$/;"	m	struct:patient_event_s	typeref:typename:pt_event_e
-__anon05531345020a	hospitalexe/patient.h	/^	union {$/;"	u	struct:patient_event_s
-reg	hospitalexe/patient.h	/^		ptevt_register_t       reg;$/;"	m	union:patient_event_s::__anon05531345020a	typeref:typename:ptevt_register_t
-dr	hospitalexe/patient.h	/^		ptevt_dr_t             dr;$/;"	m	union:patient_event_s::__anon05531345020a	typeref:typename:ptevt_dr_t
-intr	hospitalexe/patient.h	/^		ptevt_intr_t           intr;$/;"	m	union:patient_event_s::__anon05531345020a	typeref:typename:ptevt_intr_t
-feedback	hospitalexe/patient.h	/^		ptevt_feedback_t       feedback;$/;"	m	union:patient_event_s::__anon05531345020a	typeref:typename:ptevt_feedback_t
-patient_event_t	hospitalexe/patient.h	/^} patient_event_t;$/;"	t	typeref:struct:patient_event_s
-_LINUX_LIST_H	list/list.h	/^#define _LINUX_LIST_H$/;"	d
-offsetof	list/list.h	/^#define offsetof(/;"	d
-container_of	list/list.h	/^#define container_of(/;"	d
-LIST_POISON1	list/list.h	/^#define LIST_POISON1 /;"	d
-LIST_POISON2	list/list.h	/^#define LIST_POISON2 /;"	d
-list_head	list/list.h	/^struct list_head {$/;"	s
-next	list/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head *
-prev	list/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head **
-LIST_HEAD_INIT	list/list.h	/^#define LIST_HEAD_INIT(/;"	d
-LIST_HEAD	list/list.h	/^#define LIST_HEAD(/;"	d
-INIT_LIST_HEAD	list/list.h	/^#define INIT_LIST_HEAD(/;"	d
-__list_add	list/list.h	/^static inline void __list_add(struct list_head *new,$/;"	f	typeref:typename:void
-list_add	list/list.h	/^static inline void list_add(struct list_head *new, struct list_head *head)$/;"	f	typeref:typename:void
-list_add_tail	list/list.h	/^static inline void list_add_tail(struct list_head *new, struct list_head *head)$/;"	f	typeref:typename:void
-__list_del	list/list.h	/^static inline void __list_del(struct list_head * prev, struct list_head * next)$/;"	f	typeref:typename:void
-list_del	list/list.h	/^static inline void list_del(struct list_head *entry)$/;"	f	typeref:typename:void
-list_del_init	list/list.h	/^static inline void list_del_init(struct list_head *entry)$/;"	f	typeref:typename:void
-list_move	list/list.h	/^static inline void list_move(struct list_head *list, struct list_head *head)$/;"	f	typeref:typename:void
-list_move_tail	list/list.h	/^static inline void list_move_tail(struct list_head *list,$/;"	f	typeref:typename:void
-list_empty	list/list.h	/^static inline int list_empty(const struct list_head *head)$/;"	f	typeref:typename:int
-__list_splice	list/list.h	/^static inline void __list_splice(struct list_head *list,$/;"	f	typeref:typename:void
-list_splice	list/list.h	/^static inline void list_splice(struct list_head *list, struct list_head *head)$/;"	f	typeref:typename:void
-list_splice_init	list/list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f	typeref:typename:void
-list_entry	list/list.h	/^#define list_entry(/;"	d
-list_for_each	list/list.h	/^#define list_for_each(/;"	d
-__list_for_each	list/list.h	/^#define __list_for_each(/;"	d
-list_for_each_prev	list/list.h	/^#define list_for_each_prev(/;"	d
-list_for_each_safe	list/list.h	/^#define list_for_each_safe(/;"	d
-list_for_each_entry	list/list.h	/^#define list_for_each_entry(/;"	d
-list_for_each_entry_reverse	list/list.h	/^#define list_for_each_entry_reverse(/;"	d
-list_prepare_entry	list/list.h	/^#define list_prepare_entry(/;"	d
-list_for_each_entry_continue	list/list.h	/^#define list_for_each_entry_continue(/;"	d
-list_for_each_entry_safe	list/list.h	/^#define list_for_each_entry_safe(/;"	d
-list_for_each_entry_safe_continue	list/list.h	/^#define list_for_each_entry_safe_continue(/;"	d
-list_for_each_entry_safe_reverse	list/list.h	/^#define list_for_each_entry_safe_reverse(/;"	d
-hlist_head	list/list.h	/^struct hlist_head {$/;"	s
-first	list/list.h	/^	struct hlist_node *first;$/;"	m	struct:hlist_head	typeref:struct:hlist_node *
-hlist_node	list/list.h	/^struct hlist_node {$/;"	s
-next	list/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node *
-pprev	list/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node ***
-HLIST_HEAD_INIT	list/list.h	/^#define HLIST_HEAD_INIT /;"	d
-HLIST_HEAD	list/list.h	/^#define HLIST_HEAD(/;"	d
-INIT_HLIST_HEAD	list/list.h	/^#define INIT_HLIST_HEAD(/;"	d
-INIT_HLIST_NODE	list/list.h	/^#define INIT_HLIST_NODE(/;"	d
-hlist_unhashed	list/list.h	/^static inline int hlist_unhashed(const struct hlist_node *h)$/;"	f	typeref:typename:int
-hlist_empty	list/list.h	/^static inline int hlist_empty(const struct hlist_head *h)$/;"	f	typeref:typename:int
-__hlist_del	list/list.h	/^static inline void __hlist_del(struct hlist_node *n)$/;"	f	typeref:typename:void
-hlist_del	list/list.h	/^static inline void hlist_del(struct hlist_node *n)$/;"	f	typeref:typename:void
-hlist_del_init	list/list.h	/^static inline void hlist_del_init(struct hlist_node *n)$/;"	f	typeref:typename:void
-hlist_add_head	list/list.h	/^static inline void hlist_add_head(struct hlist_node *n, struct hlist_head *h)$/;"	f	typeref:typename:void
-hlist_add_before	list/list.h	/^static inline void hlist_add_before(struct hlist_node *n,$/;"	f	typeref:typename:void
-hlist_add_after	list/list.h	/^static inline void hlist_add_after(struct hlist_node *n,$/;"	f	typeref:typename:void
-hlist_entry	list/list.h	/^#define hlist_entry(/;"	d
-hlist_for_each	list/list.h	/^#define hlist_for_each(/;"	d
-hlist_for_each_safe	list/list.h	/^#define hlist_for_each_safe(/;"	d
-hlist_for_each_entry	list/list.h	/^#define hlist_for_each_entry(/;"	d
-hlist_for_each_entry_continue	list/list.h	/^#define hlist_for_each_entry_continue(/;"	d
-hlist_for_each_entry_from	list/list.h	/^#define hlist_for_each_entry_from(/;"	d
-hlist_for_each_entry_safe	list/list.h	/^#define hlist_for_each_entry_safe(/;"	d
+clinic_init	driver.c	/^clinic_info_t *clinic_init(void)$/;"	f	typeref:typename:clinic_info_t *
+_LINUX_LIST_H	include/list.h	/^#define _LINUX_LIST_H$/;"	d
+offsetof	include/list.h	/^#define offsetof(/;"	d
+container_of	include/list.h	/^#define container_of(/;"	d
+LIST_POISON1	include/list.h	/^#define LIST_POISON1 /;"	d
+LIST_POISON2	include/list.h	/^#define LIST_POISON2 /;"	d
+list_head	include/list.h	/^struct list_head {$/;"	s
+next	include/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head *
+prev	include/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head **
+LIST_HEAD_INIT	include/list.h	/^#define LIST_HEAD_INIT(/;"	d
+LIST_HEAD	include/list.h	/^#define LIST_HEAD(/;"	d
+INIT_LIST_HEAD	include/list.h	/^#define INIT_LIST_HEAD(/;"	d
+__list_add	include/list.h	/^static inline void __list_add(struct list_head *new,$/;"	f	typeref:typename:void
+list_add	include/list.h	/^static inline void list_add(struct list_head *new, struct list_head *head)$/;"	f	typeref:typename:void
+list_add_tail	include/list.h	/^static inline void list_add_tail(struct list_head *new, struct list_head *head)$/;"	f	typeref:typename:void
+__list_del	include/list.h	/^static inline void __list_del(struct list_head * prev, struct list_head * next)$/;"	f	typeref:typename:void
+list_del	include/list.h	/^static inline void list_del(struct list_head *entry)$/;"	f	typeref:typename:void
+list_del_init	include/list.h	/^static inline void list_del_init(struct list_head *entry)$/;"	f	typeref:typename:void
+list_move	include/list.h	/^static inline void list_move(struct list_head *list, struct list_head *head)$/;"	f	typeref:typename:void
+list_move_tail	include/list.h	/^static inline void list_move_tail(struct list_head *list,$/;"	f	typeref:typename:void
+list_empty	include/list.h	/^static inline int list_empty(const struct list_head *head)$/;"	f	typeref:typename:int
+__list_splice	include/list.h	/^static inline void __list_splice(struct list_head *list,$/;"	f	typeref:typename:void
+list_splice	include/list.h	/^static inline void list_splice(struct list_head *list, struct list_head *head)$/;"	f	typeref:typename:void
+list_splice_init	include/list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f	typeref:typename:void
+list_entry	include/list.h	/^#define list_entry(/;"	d
+list_for_each	include/list.h	/^#define list_for_each(/;"	d
+__list_for_each	include/list.h	/^#define __list_for_each(/;"	d
+list_for_each_prev	include/list.h	/^#define list_for_each_prev(/;"	d
+list_for_each_safe	include/list.h	/^#define list_for_each_safe(/;"	d
+list_for_each_entry	include/list.h	/^#define list_for_each_entry(/;"	d
+list_for_each_entry_reverse	include/list.h	/^#define list_for_each_entry_reverse(/;"	d
+list_prepare_entry	include/list.h	/^#define list_prepare_entry(/;"	d
+list_for_each_entry_continue	include/list.h	/^#define list_for_each_entry_continue(/;"	d
+list_for_each_entry_safe	include/list.h	/^#define list_for_each_entry_safe(/;"	d
+list_for_each_entry_safe_continue	include/list.h	/^#define list_for_each_entry_safe_continue(/;"	d
+list_for_each_entry_safe_reverse	include/list.h	/^#define list_for_each_entry_safe_reverse(/;"	d
+hlist_head	include/list.h	/^struct hlist_head {$/;"	s
+first	include/list.h	/^	struct hlist_node *first;$/;"	m	struct:hlist_head	typeref:struct:hlist_node *
+hlist_node	include/list.h	/^struct hlist_node {$/;"	s
+next	include/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node *
+pprev	include/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node ***
+HLIST_HEAD_INIT	include/list.h	/^#define HLIST_HEAD_INIT /;"	d
+HLIST_HEAD	include/list.h	/^#define HLIST_HEAD(/;"	d
+INIT_HLIST_HEAD	include/list.h	/^#define INIT_HLIST_HEAD(/;"	d
+INIT_HLIST_NODE	include/list.h	/^#define INIT_HLIST_NODE(/;"	d
+hlist_unhashed	include/list.h	/^static inline int hlist_unhashed(const struct hlist_node *h)$/;"	f	typeref:typename:int
+hlist_empty	include/list.h	/^static inline int hlist_empty(const struct hlist_head *h)$/;"	f	typeref:typename:int
+__hlist_del	include/list.h	/^static inline void __hlist_del(struct hlist_node *n)$/;"	f	typeref:typename:void
+hlist_del	include/list.h	/^static inline void hlist_del(struct hlist_node *n)$/;"	f	typeref:typename:void
+hlist_del_init	include/list.h	/^static inline void hlist_del_init(struct hlist_node *n)$/;"	f	typeref:typename:void
+hlist_add_head	include/list.h	/^static inline void hlist_add_head(struct hlist_node *n, struct hlist_head *h)$/;"	f	typeref:typename:void
+hlist_add_before	include/list.h	/^static inline void hlist_add_before(struct hlist_node *n,$/;"	f	typeref:typename:void
+hlist_add_after	include/list.h	/^static inline void hlist_add_after(struct hlist_node *n,$/;"	f	typeref:typename:void
+hlist_entry	include/list.h	/^#define hlist_entry(/;"	d
+hlist_for_each	include/list.h	/^#define hlist_for_each(/;"	d
+hlist_for_each_safe	include/list.h	/^#define hlist_for_each_safe(/;"	d
+hlist_for_each_entry	include/list.h	/^#define hlist_for_each_entry(/;"	d
+hlist_for_each_entry_continue	include/list.h	/^#define hlist_for_each_entry_continue(/;"	d
+hlist_for_each_entry_from	include/list.h	/^#define hlist_for_each_entry_from(/;"	d
+hlist_for_each_entry_safe	include/list.h	/^#define hlist_for_each_entry_safe(/;"	d
+__QUEUE_H__	include/queue.h	/^#define __QUEUE_H__$/;"	d
+QueueElement	include/queue.h	/^#define QueueElement /;"	d
+__anon4eea27d30108	include/queue.h	/^typedef struct{$/;"	s
+seq	include/queue.h	/^    int seq;$/;"	m	struct:__anon4eea27d30108	typeref:typename:int
+capacity	include/queue.h	/^    int capacity;$/;"	m	struct:__anon4eea27d30108	typeref:typename:int
+size	include/queue.h	/^    int size;$/;"	m	struct:__anon4eea27d30108	typeref:typename:int
+pos	include/queue.h	/^    int pos;$/;"	m	struct:__anon4eea27d30108	typeref:typename:int
+e	include/queue.h	/^    QueueElement e;$/;"	m	struct:__anon4eea27d30108	typeref:typename:QueueElement
+pinfo	include/queue.h	/^    patients_info_t *pinfo;$/;"	m	struct:__anon4eea27d30108	typeref:typename:patients_info_t *
+list	include/queue.h	/^    struct list_head list;$/;"	m	struct:__anon4eea27d30108	typeref:struct:list_head
+Queue	include/queue.h	/^} Queue;$/;"	t	typeref:struct:__anon4eea27d30108
+__CLINIC_H__	include/clinic.h	/^#define __CLINIC_H__$/;"	d
+SPECIALIST_ID	include/clinic.h	/^#define SPECIALIST_ID	/;"	d
+__anon94a25e000103	include/clinic.h	/^typedef enum {$/;"	g
+AIL_NONE	include/clinic.h	/^	AIL_NONE = 0,              \/* Default, shouldn't bet set *\/$/;"	e	enum:__anon94a25e000103
+AIL_CHECKUP	include/clinic.h	/^	AIL_CHECKUP,               \/* Takes 12 units of time *\/$/;"	e	enum:__anon94a25e000103
+AIL_GENERAL_MALAISE	include/clinic.h	/^	AIL_GENERAL_MALAISE,       \/* Takes 10 units of time *\/$/;"	e	enum:__anon94a25e000103
+AIL_FEVER	include/clinic.h	/^	AIL_FEVER,                 \/* Takes 8 units of time *\/$/;"	e	enum:__anon94a25e000103
+AIL_PHYSICAL_INJURY	include/clinic.h	/^	AIL_PHYSICAL_INJURY,       \/* Takes 6 units of time *\/$/;"	e	enum:__anon94a25e000103
+AIL_OTHER	include/clinic.h	/^	AIL_OTHER,                 \/* Takes 4 units of time *\/$/;"	e	enum:__anon94a25e000103
+AIL_COUNT	include/clinic.h	/^	AIL_COUNT                  \/* Sentinel, ignore *\/$/;"	e	enum:__anon94a25e000103
+ailment_e	include/clinic.h	/^} ailment_e;$/;"	t	typeref:enum:__anon94a25e000103
+__anon94a25e000203	include/clinic.h	/^typedef enum {$/;"	g
+MEMBERSHIP_NONE	include/clinic.h	/^	MEMBERSHIP_NONE = 0,        \/* Default, shouldn't be set *\/$/;"	e	enum:__anon94a25e000203
+MEMBERSHIP_SILVER	include/clinic.h	/^	MEMBERSHIP_SILVER,          \/* Silver membership has a prioroity of 1 *\/$/;"	e	enum:__anon94a25e000203
+MEMBERSHIP_GOLD	include/clinic.h	/^	MEMBERSHIP_GOLD,            \/* Gold membership has a priority of 2 *\/$/;"	e	enum:__anon94a25e000203
+MEMBERSHIP_PLATINUM	include/clinic.h	/^	MEMBERSHIP_PLATINUM,        \/* Platinum membership has a priority of 3 *\/$/;"	e	enum:__anon94a25e000203
+MEMBERSHIP_VIP	include/clinic.h	/^	MEMBERSHIP_VIP,             \/* VIP membership has a priority of 4 *\/$/;"	e	enum:__anon94a25e000203
+membership_e	include/clinic.h	/^} membership_e;$/;"	t	typeref:enum:__anon94a25e000203
+__DOCTOR_H__	include/doctor.h	/^#define __DOCTOR_H__$/;"	d
+__anon5a4412790103	include/doctor.h	/^typedef enum {$/;"	g
+DREVT_NONE	include/doctor.h	/^	DREVT_NONE = 0,$/;"	e	enum:__anon5a4412790103
+DREVT_SHIFTSTART	include/doctor.h	/^	DREVT_SHIFTSTART,        \/* None:             Doctor's day is starting *\/$/;"	e	enum:__anon5a4412790103
+DREVT_SHIFTEND	include/doctor.h	/^	DREVT_SHIFTEND,          \/* None:             Doctor's day is ending *\/$/;"	e	enum:__anon5a4412790103
+DREVT_WAITING	include/doctor.h	/^	DREVT_WAITING,           \/* drevt_status_t:   Doctor is idle as no patients are available to t/;"	e	enum:__anon5a4412790103
+DREVT_WOKENUP	include/doctor.h	/^	DREVT_WOKENUP,           \/* drevt_status_t:   Doctor is woken up by a patient who needs treati/;"	e	enum:__anon5a4412790103
+DREVT_TREATSTART	include/doctor.h	/^	DREVT_TREATSTART,        \/* drevt_aptmt_t:    Doctor is starting an appointment *\/$/;"	e	enum:__anon5a4412790103
+DREVT_TREATEND	include/doctor.h	/^	DREVT_TREATEND,          \/* drevt aptmt_t:    Doctor is ending the appointment *\/$/;"	e	enum:__anon5a4412790103
+DREVT_SPECIALSTART	include/doctor.h	/^        DREVT_SPECIALSTART,      \/* drevt_aptmt_t:    Doctor is calling the specialist *\/$/;"	e	enum:__anon5a4412790103
+DREVT_SPECIALEND	include/doctor.h	/^        DREVT_SPECIALEND,        \/* drevt_aptmt_t:    Doctor is done consulting with the specia/;"	e	enum:__anon5a4412790103
+DREVT_COUNT	include/doctor.h	/^	DREVT_COUNT,             \/* Sentinel value, not used *\/$/;"	e	enum:__anon5a4412790103
+dr_event_e	include/doctor.h	/^} dr_event_e;$/;"	t	typeref:enum:__anon5a4412790103
+drevt_status_s	include/doctor.h	/^typedef struct drevt_status_s {$/;"	s
+patient_id	include/doctor.h	/^	uint32_t        patient_id;$/;"	m	struct:drevt_status_s	typeref:typename:uint32_t
+patients_treated	include/doctor.h	/^	uint32_t        patients_treated;$/;"	m	struct:drevt_status_s	typeref:typename:uint32_t
+idle_count	include/doctor.h	/^	uint32_t        idle_count;$/;"	m	struct:drevt_status_s	typeref:typename:uint32_t
+idle_time	include/doctor.h	/^	uint32_t        idle_time;$/;"	m	struct:drevt_status_s	typeref:typename:uint32_t
+drevt_status_t	include/doctor.h	/^} drevt_status_t;$/;"	t	typeref:struct:drevt_status_s
+drevt_aptmt_s	include/doctor.h	/^typedef struct drevt_aptmt_s {$/;"	s
+patient_id	include/doctor.h	/^	uint32_t       patient_id;$/;"	m	struct:drevt_aptmt_s	typeref:typename:uint32_t
+specialist_id	include/doctor.h	/^	uint32_t       specialist_id;$/;"	m	struct:drevt_aptmt_s	typeref:typename:uint32_t
+apt_length	include/doctor.h	/^	uint32_t       apt_length;$/;"	m	struct:drevt_aptmt_s	typeref:typename:uint32_t
+ailment	include/doctor.h	/^	ailment_e      ailment;$/;"	m	struct:drevt_aptmt_s	typeref:typename:ailment_e
+drevt_aptmt_t	include/doctor.h	/^} drevt_aptmt_t;$/;"	t	typeref:struct:drevt_aptmt_s
+doctor_event_s	include/doctor.h	/^typedef struct doctor_event_s {$/;"	s
+timestamp	include/doctor.h	/^	struct timespec    timestamp;$/;"	m	struct:doctor_event_s	typeref:struct:timespec
+type	include/doctor.h	/^	dr_event_e         type;$/;"	m	struct:doctor_event_s	typeref:typename:dr_event_e
+__anon5a441279020a	include/doctor.h	/^	union {$/;"	u	struct:doctor_event_s
+status	include/doctor.h	/^		drevt_status_t    status;$/;"	m	union:doctor_event_s::__anon5a441279020a	typeref:typename:drevt_status_t
+aptmt	include/doctor.h	/^		drevt_aptmt_t     aptmt;$/;"	m	union:doctor_event_s::__anon5a441279020a	typeref:typename:drevt_aptmt_t
+doctor_event_t	include/doctor.h	/^} doctor_event_t;$/;"	t	typeref:struct:doctor_event_s
+__CLIENT_H__	include/client.h	/^#define __CLIENT_H__$/;"	d
+TRUE	include/client.h	/^#define TRUE /;"	d
+clinic_info	include/client.h	/^typedef struct clinic_info {$/;"	s
+wq	include/client.h	/^	Queue *wq;$/;"	m	struct:clinic_info	typeref:typename:Queue *
+cbq	include/client.h	/^	Queue *cbq;$/;"	m	struct:clinic_info	typeref:typename:Queue *
+reception	include/client.h	/^	pthread_t reception;$/;"	m	struct:clinic_info	typeref:typename:pthread_t
+leftroom	include/client.h	/^	pthread_t leftroom;$/;"	m	struct:clinic_info	typeref:typename:pthread_t
+mutex	include/client.h	/^	pthread_mutex_t mutex;$/;"	m	struct:clinic_info	typeref:typename:pthread_mutex_t
+vip_request	include/client.h	/^	pthread_cond_t vip_request;$/;"	m	struct:clinic_info	typeref:typename:pthread_cond_t
+cbq_request	include/client.h	/^	pthread_cond_t cbq_request;$/;"	m	struct:clinic_info	typeref:typename:pthread_cond_t
+semaphore	include/client.h	/^	sem_t semaphore;$/;"	m	struct:clinic_info	typeref:typename:sem_t
+thread_num	include/client.h	/^	int thread_num[NUMBER_OF_THREADS + 1];$/;"	m	struct:clinic_info	typeref:typename:int[]
+doctor_max_patients	include/client.h	/^	uint8_t doctor_max_patients;$/;"	m	struct:clinic_info	typeref:typename:uint8_t
+pinfo	include/client.h	/^	patients_info_t pinfo;$/;"	m	struct:clinic_info	typeref:typename:patients_info_t
+doctorpool	include/client.h	/^	pthread_t doctorpool[NUMBER_OF_THREADS + 1];$/;"	m	struct:clinic_info	typeref:typename:pthread_t[]
+dinfo	include/client.h	/^	doctor_info_t dinfo[NUMBER_OF_THREADS + 1];$/;"	m	struct:clinic_info	typeref:typename:doctor_info_t[]
+clinic_info_t	include/client.h	/^}clinic_info_t;$/;"	t	typeref:struct:clinic_info
+__COMMON_H__	include/common.h	/^#define __COMMON_H__$/;"	d
+WQMAX_ROOM_SIZE	include/common.h	/^#define WQMAX_ROOM_SIZE /;"	d
+CBQMAX_ROOM_SIZE	include/common.h	/^#define CBQMAX_ROOM_SIZE /;"	d
+NUMBER_OF_THREADS	include/common.h	/^#define NUMBER_OF_THREADS /;"	d
+DOCTOR1_SERVED_PATIENTS	include/common.h	/^#define DOCTOR1_SERVED_PATIENTS /;"	d
+DOCTOR2_SERVED_PATIENTS	include/common.h	/^#define DOCTOR2_SERVED_PATIENTS /;"	d
+DOCTOR3_SERVED_PATIENTS	include/common.h	/^#define DOCTOR3_SERVED_PATIENTS /;"	d
+DOCTOR4_SERVED_PATIENTS	include/common.h	/^#define DOCTOR4_SERVED_PATIENTS /;"	d
+doctor_info	include/common.h	/^typedef struct doctor_info {$/;"	s
+doc_deals_with_spec	include/common.h	/^	drevt_aptmt_t doc_deals_with_spec;$/;"	m	struct:doctor_info	typeref:typename:drevt_aptmt_t
+doc_events	include/common.h	/^	doctor_event_t doc_events;$/;"	m	struct:doctor_info	typeref:typename:doctor_event_t
+interrupter_details	include/common.h	/^	ptevt_intr_t interrupter_details;$/;"	m	struct:doctor_info	typeref:typename:ptevt_intr_t
+num_patients	include/common.h	/^	int num_patients;$/;"	m	struct:doctor_info	typeref:typename:int
+doctorid	include/common.h	/^	int doctorid;$/;"	m	struct:doctor_info	typeref:typename:int
+patientid	include/common.h	/^	int patientid;$/;"	m	struct:doctor_info	typeref:typename:int
+interrupt_count	include/common.h	/^	int interrupt_count;$/;"	m	struct:doctor_info	typeref:typename:int
+max_patients	include/common.h	/^	int max_patients;$/;"	m	struct:doctor_info	typeref:typename:int
+doctor_info_t	include/common.h	/^}doctor_info_t;$/;"	t	typeref:struct:doctor_info
+patient_data	include/common.h	/^typedef struct patient_data {$/;"	s
+patient_id	include/common.h	/^	int patient_id;$/;"	m	struct:patient_data	typeref:typename:int
+idle_time	include/common.h	/^	int idle_time;$/;"	m	struct:patient_data	typeref:typename:int
+interrupted	include/common.h	/^	bool interrupted;$/;"	m	struct:patient_data	typeref:typename:bool
+patient_reg_info	include/common.h	/^	ptevt_register_t patient_reg_info;$/;"	m	struct:patient_data	typeref:typename:ptevt_register_t
+list	include/common.h	/^	struct list_head list;$/;"	m	struct:patient_data	typeref:struct:list_head
+patients_info_t	include/common.h	/^}patients_info_t;$/;"	t	typeref:struct:patient_data
+__PATIENT_H__	include/patient.h	/^#define __PATIENT_H__$/;"	d
+__anon2f414f630103	include/patient.h	/^typedef enum {$/;"	g
+PTEVT_NONE	include/patient.h	/^	PTEVT_NONE = 0,$/;"	e	enum:__anon2f414f630103
+PTEVT_CLINIC_ARRIVAL	include/patient.h	/^	PTEVT_CLINIC_ARRIVAL,        \/* ptevt_register_t: patient arrives at the clinic (includes retu/;"	e	enum:__anon2f414f630103
+PTEVT_CLINIC_DEPARTURE	include/patient.h	/^	PTEVT_CLINIC_DEPARTURE,      \/* ptevt_register_t: patient leaves the clinic (including tempora/;"	e	enum:__anon2f414f630103
+PTEVT_WAITROOM_ARRIVAL	include/patient.h	/^	PTEVT_WAITROOM_ARRIVAL,      \/* None:             patient sits in waiting room *\/$/;"	e	enum:__anon2f414f630103
+PTEVT_WAITROOM_DEPARTURE	include/patient.h	/^	PTEVT_WAITROOM_DEPARTURE,    \/* None:             patient leaves waiting room *\/$/;"	e	enum:__anon2f414f630103
+PTEVT_DOCTOR_TREATSTART	include/patient.h	/^	PTEVT_DOCTOR_TREATSTART,     \/* ptevt_dr_t:       doctor starts or resumes treating a patient /;"	e	enum:__anon2f414f630103
+PTEVT_DOCTOR_TREATSTOP	include/patient.h	/^	PTEVT_DOCTOR_TREATSTOP,      \/* ptevt_dr_t:       doctor is finished treating a patient *\/$/;"	e	enum:__anon2f414f630103
+PTEVT_SPECIALIST_TREATSTART	include/patient.h	/^	PTEVT_SPECIALIST_TREATSTART, \/* ptevt_dr_t:       specialist starts treating a patient *\/$/;"	e	enum:__anon2f414f630103
+PTEVT_SPECIALIST_TREATSTOP	include/patient.h	/^	PTEVT_SPECIALIST_TREATSTOP,  \/* ptevt_dr_t:       specialist is finished treating a patient *\/$/;"	e	enum:__anon2f414f630103
+PTEVT_APT_INTRREQUEST	include/patient.h	/^        PTEVT_APT_INTRREQUEST,       \/* ptevt_intr_t:     a VIP patient tried to interrupt a pa/;"	e	enum:__anon2f414f630103
+PTEVT_WAITLIST_ADDED	include/patient.h	/^	PTEVT_WAITLIST_ADDED,        \/* None:             patient is added to the callback waitlist *\/$/;"	e	enum:__anon2f414f630103
+PTEVT_WAITLIST_REMOVED	include/patient.h	/^	PTEVT_WAITLIST_REMOVED,      \/* None:             patient is removed from the callback waitlis/;"	e	enum:__anon2f414f630103
+PTEVT_FEEBACK	include/patient.h	/^	PTEVT_FEEBACK,               \/* ptevt_feedback_t  feedback was provided by a patient at the en/;"	e	enum:__anon2f414f630103
+PTEVT_COUNT	include/patient.h	/^	PTEVT_COUNT,                 \/* Sentinel value, not used *\/$/;"	e	enum:__anon2f414f630103
+pt_event_e	include/patient.h	/^} pt_event_e;$/;"	t	typeref:enum:__anon2f414f630103
+ptevt_register_s	include/patient.h	/^typedef struct ptevt_register_s {$/;"	s
+ailment	include/patient.h	/^	ailment_e      ailment;$/;"	m	struct:ptevt_register_s	typeref:typename:ailment_e
+membership	include/patient.h	/^	membership_e   membership;$/;"	m	struct:ptevt_register_s	typeref:typename:membership_e
+apt_length	include/patient.h	/^	uint32_t       apt_length;$/;"	m	struct:ptevt_register_s	typeref:typename:uint32_t
+ptevt_register_t	include/patient.h	/^} ptevt_register_t;$/;"	t	typeref:struct:ptevt_register_s
+ptevt_dr_s	include/patient.h	/^typedef struct ptevt_dr_s {$/;"	s
+doctor_id	include/patient.h	/^	uint32_t       doctor_id;$/;"	m	struct:ptevt_dr_s	typeref:typename:uint32_t
+time_remaining	include/patient.h	/^	uint32_t       time_remaining;$/;"	m	struct:ptevt_dr_s	typeref:typename:uint32_t
+ptevt_dr_t	include/patient.h	/^} ptevt_dr_t;$/;"	t	typeref:struct:ptevt_dr_s
+ptevt_intr_s	include/patient.h	/^typedef struct ptevt_intr_s {$/;"	s
+interrupter_id	include/patient.h	/^	uint32_t       interrupter_id;$/;"	m	struct:ptevt_intr_s	typeref:typename:uint32_t
+time_remaining	include/patient.h	/^	uint32_t       time_remaining;$/;"	m	struct:ptevt_intr_s	typeref:typename:uint32_t
+membership	include/patient.h	/^	membership_e   membership;$/;"	m	struct:ptevt_intr_s	typeref:typename:membership_e
+interrupted	include/patient.h	/^	bool           interrupted;$/;"	m	struct:ptevt_intr_s	typeref:typename:bool
+ptevt_intr_t	include/patient.h	/^} ptevt_intr_t;$/;"	t	typeref:struct:ptevt_intr_s
+ptevt_feedback_s	include/patient.h	/^typedef struct ptevt_feedback_s {$/;"	s
+doctor_id	include/patient.h	/^	uint32_t       doctor_id;$/;"	m	struct:ptevt_feedback_s	typeref:typename:uint32_t
+doctor_rating	include/patient.h	/^	uint32_t       doctor_rating;$/;"	m	struct:ptevt_feedback_s	typeref:typename:uint32_t
+ptevt_feedback_t	include/patient.h	/^} ptevt_feedback_t;$/;"	t	typeref:struct:ptevt_feedback_s
+patient_event_s	include/patient.h	/^typedef struct patient_event_s {$/;"	s
+timestamp	include/patient.h	/^	struct timespec    timestamp;$/;"	m	struct:patient_event_s	typeref:struct:timespec
+type	include/patient.h	/^	pt_event_e         type;$/;"	m	struct:patient_event_s	typeref:typename:pt_event_e
+__anon2f414f63020a	include/patient.h	/^	union {$/;"	u	struct:patient_event_s
+reg	include/patient.h	/^		ptevt_register_t       reg;$/;"	m	union:patient_event_s::__anon2f414f63020a	typeref:typename:ptevt_register_t
+dr	include/patient.h	/^		ptevt_dr_t             dr;$/;"	m	union:patient_event_s::__anon2f414f63020a	typeref:typename:ptevt_dr_t
+intr	include/patient.h	/^		ptevt_intr_t           intr;$/;"	m	union:patient_event_s::__anon2f414f63020a	typeref:typename:ptevt_intr_t
+feedback	include/patient.h	/^		ptevt_feedback_t       feedback;$/;"	m	union:patient_event_s::__anon2f414f63020a	typeref:typename:ptevt_feedback_t
+patient_event_t	include/patient.h	/^} patient_event_t;$/;"	t	typeref:struct:patient_event_s
 CC	Makefile	/^CC=gcc$/;"	m
 CFLAGS	Makefile	/^CFLAGS=-Wall -g$/;"	m
 PTHREADS	Makefile	/^PTHREADS=-lpthread -lrt$/;"	m
 all	Makefile	/^all: client.o driver.o queue.o$/;"	t
-client.o	Makefile	/^client.o: client.c hospitalexe\/doctor.h hospitalexe\/patient.h hospitalexe\/clinic.h client.h q/;"	t
-driver.o	Makefile	/^driver.o: driver.c driver.h hospitalexe\/doctor.h hospitalexe\/patient.h hospitalexe\/clinic.h c/;"	t
-queue.o	Makefile	/^queue.o: queue.c client.h queue.h hospitalexe\/doctor.h hospitalexe\/patient.h hospitalexe\/clin/;"	t
+client.o	Makefile	/^client.o: client.c include\/doctor.h include\/patient.h include\/clinic.h include\/client.h incl/;"	t
+driver.o	Makefile	/^driver.o: driver.c include\/doctor.h include\/patient.h include\/clinic.h include\/client.h incl/;"	t
+queue.o	Makefile	/^queue.o: queue.c include\/client.h include\/queue.h include\/doctor.h include\/patient.h include/;"	t
 clean	Makefile	/^clean:$/;"	t
 initQueue	queue.c	/^Queue * initQueue(int max)$/;"	f	typeref:typename:Queue *
 enqueue_front	queue.c	/^int enqueue_front(Queue *Q, patients_info_t *pinfo, bool is_waitq)$/;"	f	typeref:typename:int
 dequeue_ptr	queue.c	/^Queue *dequeue_ptr(Queue *Q)$/;"	f	typeref:typename:Queue *
 dequeue	queue.c	/^patients_info_t *dequeue(Queue *Q, bool is_waitq)$/;"	f	typeref:typename:patients_info_t *
 enqueue	queue.c	/^int enqueue(Queue *Q, patients_info_t *pinfo, bool is_waitq)$/;"	f	typeref:typename:int
-__QUEUE_H__	queue.h	/^#define __QUEUE_H__$/;"	d
-QueueElement	queue.h	/^#define QueueElement /;"	d
-__anon168587600108	queue.h	/^typedef struct{$/;"	s
-seq	queue.h	/^    int seq;$/;"	m	struct:__anon168587600108	typeref:typename:int
-capacity	queue.h	/^    int capacity;$/;"	m	struct:__anon168587600108	typeref:typename:int
-size	queue.h	/^    int size;$/;"	m	struct:__anon168587600108	typeref:typename:int
-pos	queue.h	/^    int pos;$/;"	m	struct:__anon168587600108	typeref:typename:int
-e	queue.h	/^    QueueElement e;$/;"	m	struct:__anon168587600108	typeref:typename:QueueElement
-pinfo	queue.h	/^    patients_info_t *pinfo;$/;"	m	struct:__anon168587600108	typeref:typename:patients_info_t *
-list	queue.h	/^    struct list_head list;$/;"	m	struct:__anon168587600108	typeref:struct:list_head
-Queue	queue.h	/^} Queue;$/;"	t	typeref:struct:__anon168587600108
-__anon83ff14f90103	sort_dll.c	/^enum { N = 40 };$/;"	g	file:
-N	sort_dll.c	/^enum { N = 40 };$/;"	e	enum:__anon83ff14f90103	file:
-Person	sort_dll.c	/^typedef struct Person$/;"	s	file:
-code	sort_dll.c	/^	int  code;$/;"	m	struct:Person	typeref:typename:int	file:
-name	sort_dll.c	/^	char name[N];$/;"	m	struct:Person	typeref:typename:char[]	file:
-job	sort_dll.c	/^	char job[N];$/;"	m	struct:Person	typeref:typename:char[]	file:
-salary	sort_dll.c	/^	int  salary;$/;"	m	struct:Person	typeref:typename:int	file:
-Person	sort_dll.c	/^} Person;$/;"	t	typeref:struct:Person	file:
-Node	sort_dll.c	/^typedef struct Node $/;"	s	file:
-person	sort_dll.c	/^	Person person;  $/;"	m	struct:Node	typeref:typename:Person	file:
-prev	sort_dll.c	/^	struct Node *prev;$/;"	m	struct:Node	typeref:struct:Node *	file:
-next	sort_dll.c	/^	struct Node *next;$/;"	m	struct:Node	typeref:struct:Node *	file:
-Node	sort_dll.c	/^} Node;$/;"	t	typeref:struct:Node	file:
-List	sort_dll.c	/^typedef struct List$/;"	s	file:
-next	sort_dll.c	/^	Node *next;$/;"	m	struct:List	typeref:typename:Node *	file:
-prev	sort_dll.c	/^	Node *prev;$/;"	m	struct:List	typeref:typename:Node *	file:
-List	sort_dll.c	/^} List;$/;"	t	typeref:struct:List	file:
-list_head	sort_dll.c	/^struct list_head {$/;"	s	file:
-next	sort_dll.c	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head *	file:
-prev	sort_dll.c	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head **	file:
-Node	sort_dll.c	/^typedef struct Node $/;"	s	file:
-person	sort_dll.c	/^	Person person;  $/;"	m	struct:Node	typeref:typename:Person	file:
-prev	sort_dll.c	/^	struct Node *prev;$/;"	m	struct:Node	typeref:struct:Node *	file:
-next	sort_dll.c	/^	struct Node *next;$/;"	m	struct:Node	typeref:struct:Node *	file:
-Node	sort_dll.c	/^} Node;$/;"	t	typeref:struct:Node	file:
-push_back	sort_dll.c	/^int push_back( List *list, const Person *person )$/;"	f	typeref:typename:int
-display	sort_dll.c	/^void display( const List *list )$/;"	f	typeref:typename:void
-swap	sort_dll.c	/^void swap( Node **current )  $/;"	f	typeref:typename:void
-clear	sort_dll.c	/^void clear( List *list )$/;"	f	typeref:typename:void
-sort	sort_dll.c	/^void sort( List *list, int cmp( const void *, const void * ) )$/;"	f	typeref:typename:void
-cmp_by_salary	sort_dll.c	/^int cmp_by_salary( const void *a, const void *b )$/;"	f	typeref:typename:int
-cmp_by_code	sort_dll.c	/^int cmp_by_code( const void *a, const void *b )$/;"	f	typeref:typename:int
-cmp_by_name	sort_dll.c	/^int cmp_by_name( const void *a, const void *b )$/;"	f	typeref:typename:int
-main	sort_dll.c	/^int main(void) $/;"	f	typeref:typename:int

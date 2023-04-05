@@ -38,4 +38,6 @@ typedef struct clinic_info {
 int process_cbq(clinic_info_t *clinic_info);
 int calculate_diag_time(ailment_e diag_type);
 void *getinstance(void);
+
+clinic_info_t *clinic_init(void);
 #endif
