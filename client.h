@@ -28,7 +28,7 @@ typedef struct low_prio {
 }skip_q;
 
 typedef struct clinic_info {
-	int *thread_num;
+	int thread_num[NUMBER_OF_THREADS + 1];
 	patients_info_t pinfo;
 	doctor_info_t dinfo[NUMBER_OF_THREADS + 1];
 	Queue *wq;
