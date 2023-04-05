@@ -8,10 +8,10 @@
 #include <time.h>
 #include <errno.h>
 #include <sys/time.h>
-#include "list/list.h"
-#include "hospitalexe/clinic.h"
-#include "hospitalexe/doctor.h"
-#include "hospitalexe/patient.h"
+#include "list.h"
+#include "clinic.h"
+#include "doctor.h"
+#include "patient.h"
 #include "common.h"
 
 #ifndef QueueElement

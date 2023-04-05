@@ -7,13 +7,13 @@ PTHREADS=-lpthread -lrt
 all: client.o driver.o queue.o
 	$(CC) $(CFLAGS) -o test client.o driver.o queue.o $(PTHREADS)
 
-client.o: client.c hospitalexe/doctor.h hospitalexe/patient.h hospitalexe/clinic.h client.h queue.h common.h
+client.o: client.c include/doctor.h include/patient.h include/clinic.h include/client.h include/queue.h include/common.h
 	$(CC) $(CFLAGS) -c client.c $(PTHREADS)
 
-driver.o: driver.c driver.h hospitalexe/doctor.h hospitalexe/patient.h hospitalexe/clinic.h client.h queue.h common.h
+driver.o: driver.c include/doctor.h include/patient.h include/clinic.h include/client.h include/queue.h include/common.h
 	$(CC) $(CFLAGS) -c driver.c $(PTHREADS)
 
-queue.o: queue.c client.h queue.h hospitalexe/doctor.h hospitalexe/patient.h hospitalexe/clinic.h common.h
+queue.o: queue.c include/client.h include/queue.h include/doctor.h include/patient.h include/clinic.h include/common.h
 	$(CC) $(CFLAGS) -c queue.c $(PTHREADS)
 clean:
 	rm -rf *.o

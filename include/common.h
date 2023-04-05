@@ -1,9 +1,12 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
-#include "list/list.h"
-#include "hospitalexe/clinic.h"
-#include "hospitalexe/doctor.h"
-#include "hospitalexe/patient.h"
+#include "list.h"
+#include "clinic.h"
+#include "doctor.h"
+#include "patient.h"
+
+/* User has to change below values to set the waitQ and CBQ size
+ * and doctor max attend patients */
 
 #define WQMAX_ROOM_SIZE 4
 #define CBQMAX_ROOM_SIZE 100
@@ -30,27 +33,7 @@ typedef struct patient_data {
 	int idle_time;
 	bool interrupted;
 	ptevt_register_t patient_reg_info;
-	ptevt_dr_t doctor_info;
-	
-	patient_event_t event_info;
-	ptevt_feedback_t doctor_fb;
-
 	struct list_head list;
 }patients_info_t;
-
-#if 0
-#include "queue.h"
-
-typedef struct clinic_info {
-	patients_info_t pinfo;
-	doctor_info_t dinfo[NUMBER_OF_THREADS + 1];
-	Queue *wq;
-	Queue *cbq;
-	uint8_t thread_id;
-	uint32_t seq_id;
-	pthread_t reception;
-	pthread_t leftroom;
-}clinic_info_t;
-#endif
 
 #endif

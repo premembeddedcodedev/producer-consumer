@@ -1,11 +1,9 @@
-#include "client.h"
-#include "driver.h"
 #include <sys/time.h>
 #include <signal.h>
 #include <string.h>
 #include <stdlib.h>
-#include "queue.h"
-#include "client.h"
+#include "include/queue.h"
+#include "include/client.h"
 
 Queue * initQueue(int max)
 {
