@@ -38,7 +38,7 @@ typedef struct clinic_info {
 	uint8_t doctor_max_patients;
 	pthread_t reception;
 	pthread_t leftroom;
-	pthread_t doctorpool;
+	pthread_t doctorpool[NUMBER_OF_THREADS + 1];
 	pthread_mutex_t mutex;
 	pthread_cond_t vip_request;
 	pthread_cond_t cbq_request;

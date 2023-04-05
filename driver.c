@@ -114,24 +114,25 @@ bool is_doctor_max_patients_exceeded(clinic_info_t *clinic_info, int tid)
 
 void *doctor_process(void *param)
 {
-	//int tid = *((int *) param);
-	int tid = (int ) param;
-	clinic_info_t *clinic_info = (clinic_info_t *)getinstance();
+	int tid = *((int *) param);
 
 	while(TRUE) {
-		if(!is_doctor_max_patients_exceeded(clinic_info, tid)) {
-			pthread_exit(0);
-			return;	
-		}
+		clinic_info_t *clinic_info = (clinic_info_t *)getinstance();
 		sem_wait(&clinic_info->semaphore);
 		pthread_mutex_lock(&clinic_info->mutex);
-		clinic_info_t *clinic_info = (clinic_info_t *)getinstance();
 		patients_info_t *pinfo = dequeue(clinic_info->wq, true);
 		if(!pinfo) {
 			pthread_cond_broadcast(&clinic_info->cbq_request);
 			pthread_mutex_unlock(&clinic_info->mutex);
 			sem_post(&clinic_info->semaphore);
 			continue;
+		}
+		clinic_info->dinfo[tid].max_patients++;
+		if(!is_doctor_max_patients_exceeded(clinic_info, tid)) {
+			pthread_mutex_unlock(&clinic_info->mutex);
+			sem_post(&clinic_info->semaphore);
+			pthread_exit(0);
+			return;	
 		}
 		pthread_mutex_unlock(&clinic_info->mutex);
 		sem_post(&clinic_info->semaphore);
@@ -145,7 +146,6 @@ void *doctor_process(void *param)
 
 		if(specialist_generation(clinic_info, tid)) {
 			clinic_info->dinfo[tid].num_patients++;
-			clinic_info->dinfo[tid].max_patients++;
 			printf("in specialist consultation...\n");
 			sleep(pinfo->idle_time + 7);
 			clinic_info->dinfo[tid].doc_deals_with_spec.
@@ -157,7 +157,6 @@ void *doctor_process(void *param)
 		} else if(pinfo->patient_reg_info.membership
 				== MEMBERSHIP_VIP) {
 			clinic_info->dinfo[tid].num_patients++;
-			clinic_info->dinfo[tid].max_patients++;
 			printf("VIP membership executing...\n");
 			sleep(pinfo->idle_time);
 		} else {
@@ -166,7 +165,6 @@ void *doctor_process(void *param)
 			pthread_mutex_unlock(&clinic_info->mutex);
 			sem_post(&clinic_info->semaphore);
 		}
-		clinic_info->dinfo[tid].max_patients++;
 	}
 	pthread_exit(0);
 }
@@ -379,16 +377,17 @@ void threads_init(clinic_info_t *clinic_info)
 #endif
 	printf("Address of thread_num: %p\n", clinic_info->thread_num);
 
-	//clinic_info->thread_num[0] = 1;
+	clinic_info->thread_num[0] = 1;
 
 	pthread_mutex_init(&clinic_info->mutex, NULL);
 	sem_init(&clinic_info->semaphore, 0, NUMBER_OF_THREADS);
 
 	for (int i = 0; i < NUMBER_OF_THREADS; ++i) {
-		//*(clinic_info->thread_num) = i+1;
-		pthread_create(&clinic_info->doctorpool, NULL, doctor_process,
-				(void *) j++);
-		printf("Created %d thread successfully\n", *clinic_info->thread_num);
+		clinic_info->thread_num[i] = j;;
+		pthread_create(&clinic_info->doctorpool[j], NULL, doctor_process,
+				(void *) &clinic_info->thread_num[i]);
+		printf("Created %d thread successfully\n", clinic_info->thread_num[i]);
+		j++;
 	}
 
 	if (pthread_cond_init(&clinic_info->vip_request, NULL) != 0) {
@@ -415,6 +414,7 @@ void threads_clean(clinic_info_t *clinic_info)
 		perror("pthread_cond_destroy() cbq error");
 		exit(2);
 	}
-	pthread_join(clinic_info->doctorpool,NULL);
+	for (int i = 0; i < NUMBER_OF_THREADS; ++i) 
+		pthread_join(clinic_info->doctorpool[i+1],NULL);
 	if (DEBUG) printf("End of execution :)\n");
 }
