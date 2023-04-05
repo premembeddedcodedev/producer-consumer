@@ -8,6 +8,12 @@
 #define WQMAX_ROOM_SIZE 4
 #define CBQMAX_ROOM_SIZE 100
 #define NUMBER_OF_THREADS 4
+
+#define DOCTOR1_SERVED_PATIENTS 3
+#define DOCTOR2_SERVED_PATIENTS 6
+#define DOCTOR3_SERVED_PATIENTS 5
+#define DOCTOR4_SERVED_PATIENTS 4
+
 typedef struct doctor_info {
 	drevt_aptmt_t doc_deals_with_spec;
 	doctor_event_t doc_events;
@@ -16,6 +22,7 @@ typedef struct doctor_info {
 	int doctorid;
 	int patientid;
 	int interrupt_count;
+	int max_patients;
 }doctor_info_t;
 
 typedef struct patient_data {

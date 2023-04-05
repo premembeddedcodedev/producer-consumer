@@ -89,16 +89,39 @@ bool specialist_generation(clinic_info_t *clinic_info, int tid)
 
 void fill_doctor_details(clinic_info_t *clinic_info, int tid)
 {
-	//clinic_info->dinfo[tid].doctorid = tid;
-	//clinic_info->dinfo[tid].doc_deals_with_spec.specialist_id = 1;
+	clinic_info->dinfo[tid].doctorid = tid;
+	clinic_info->dinfo[tid].doc_deals_with_spec.specialist_id = 1;
 }
 
-void *worker(void *param)
+bool is_doctor_max_patients_exceeded(clinic_info_t *clinic_info, int tid)
 {
-	int tid =  (int ) param;
+	//return true;
+
+	//for(int i=1; i<NUMBER_OF_THREADS+1; i++) {
+
+	if((tid <= (NUMBER_OF_THREADS + 1)) && (clinic_info->dinfo[tid].max_patients < DOCTOR1_SERVED_PATIENTS)) 
+			return true;
+
+	if((tid <= (NUMBER_OF_THREADS + 1)) && (clinic_info->dinfo[tid].max_patients < DOCTOR2_SERVED_PATIENTS))
+			return true;
+
+	if((tid <= (NUMBER_OF_THREADS + 1)) && (clinic_info->dinfo[tid].max_patients < DOCTOR3_SERVED_PATIENTS))
+			return true;
+
+	if((tid <= (NUMBER_OF_THREADS + 1)) && (clinic_info->dinfo[tid].max_patients < DOCTOR4_SERVED_PATIENTS))
+			return true;
+	//}
+
+	return false;
+}
+
+void *doctor_process(void *param)
+{
+	int tid = *((int *) param);
 	clinic_info_t *clinic_info = (clinic_info_t *)getinstance();
 
-	while (TRUE) {
+	//while(is_doctor_max_patients_exceeded(clinic_info, tid)) {
+	while(TRUE) {
 		sem_wait(&clinic_info->semaphore);
 		pthread_mutex_lock(&clinic_info->mutex);
 		clinic_info_t *clinic_info = (clinic_info_t *)getinstance();
@@ -140,6 +163,7 @@ void *worker(void *param)
 			pthread_mutex_unlock(&clinic_info->mutex);
 			sem_post(&clinic_info->semaphore);
 		}
+		clinic_info->dinfo[tid].max_patients++;
 	}
 	pthread_exit(0);
 }
@@ -229,10 +253,10 @@ patients_info_t *dequeue_pos(clinic_info_t *clinic_info, int pos)
 
 	list_for_each_entry_safe(person, tmp, &clinic_info->wq->list, list) {
 		if(check == pos) {
-			//printf("\tvacant ailment: %d\n",\
-			person->pinfo->patient_reg_info.ailment);
-			//printf("\tvacant membership: %d\n", \
-			person->pinfo->patient_reg_info.membership);
+			/*printf("\tvacant ailment: %d\n",\
+			  person->pinfo->patient_reg_info.ailment);*/
+			/*printf("\tvacant membership: %d\n", \
+			  person->pinfo->patient_reg_info.membership);*/
 			vacant = person->pinfo;
 			list_del(&person->list);
 			free(person);
@@ -242,7 +266,7 @@ patients_info_t *dequeue_pos(clinic_info_t *clinic_info, int pos)
 	}
 	return NULL;
 }
-
+#if 0
 void swap(int *to, int* from)
 {
 	int temp;
@@ -273,6 +297,27 @@ void sort_queue(struct list_head *program_list)
 	}
 
 }
+#endif
+patients_info_t *find_min_ptr(Queue *p, patients_info_t *pinfo)
+{
+	patients_info_t *min_ptr = pinfo;
+	Queue  *tmp;
+	int iteration = 0;
+
+	int find_min = pinfo->patient_reg_info.membership;
+	//printf("============> finding min default value: %d\n", find_min);
+
+	list_for_each_entry(tmp, &p->list, list){
+		iteration++;
+		if(find_min > tmp->pinfo->patient_reg_info.membership) {
+			find_min = tmp->pinfo->patient_reg_info.membership;
+			min_ptr = tmp->pinfo; 
+		}
+	}
+	//printf("============> finding min default value: %d\n", min_ptr->patient_reg_info.membership);
+
+	return min_ptr;
+}
 
 /*
  * Submits work to the pool.
@@ -280,7 +325,6 @@ void sort_queue(struct list_head *program_list)
 int q_process(clinic_info_t *clinic_info)
 {
 	patients_info_t *pinfo;
-
 	int pos = 0;
 
 	//if vip thread is executing by the time new patient arrives
@@ -312,8 +356,9 @@ int q_process(clinic_info_t *clinic_info)
 			enqueue(clinic_info->cbq, pinfo, false);
 		}
 	} else {
+		//patients_info_t *min_ptr = find_min_ptr(clinic_info->wq, pinfo);
+		//enqueue(clinic_info->wq, min_ptr, true);
 		enqueue(clinic_info->wq, pinfo, true);
-		//sort_queue(&clinic_info->wq->list);
 	}
 
 	sem_post(&clinic_info->semaphore);
@@ -324,12 +369,23 @@ int q_process(clinic_info_t *clinic_info)
 
 void threads_init(clinic_info_t *clinic_info)
 {
-	int j = 1;
+	clinic_info->thread_num = (int *) malloc(sizeof(int));
+	if(!clinic_info->thread_num)
+		return;
+
+	printf("Address of thread_num: %p\n", clinic_info->thread_num);
+
+	*(clinic_info->thread_num) = 1;
 
 	pthread_mutex_init(&clinic_info->mutex, NULL);
 	sem_init(&clinic_info->semaphore, 0, NUMBER_OF_THREADS);
-	for (int i = 0; i < NUMBER_OF_THREADS; ++i)
-		pthread_create(&clinic_info->doctorpool, NULL, worker, (void *)j++);
+
+	for (int i = 0; i < NUMBER_OF_THREADS; ++i) {
+		*(clinic_info->thread_num) = i+1;
+		pthread_create(&clinic_info->doctorpool, NULL, doctor_process,
+				(void *) clinic_info->thread_num);
+		printf("Created %d thread successfully\n", *clinic_info->thread_num);
+	}
 
 	if (pthread_cond_init(&clinic_info->vip_request, NULL) != 0) {
 		perror("pthread_cond_init() error");

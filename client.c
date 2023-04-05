@@ -56,11 +56,6 @@ void *register_patients(void *param)
 		printf("\n\n************ Patient is about to enter after @(%ds) time....\n", val);
 		sleep(val);
 		q_process(clinic_info);
-		//printf("WQ Data:\n");
-		//print_list_data(&clinic_info->wq->list);
-		//printf("CBQ Data:\n");
-		//print_list_data(&clinic_info->cbq->list);
-
 
 		while(check >= 1)  {
 			printf("Doctor %d: patients served: %d, interrupter: %d\n", check,
@@ -99,7 +94,7 @@ int main()
 	}
 
 	memset(clinic_info, 0, sizeof(clinic_info_t));
-
+	
 	clinic_info->wq = initQueue(WQMAX_ROOM_SIZE);
 	clinic_info->cbq  = initQueue(CBQMAX_ROOM_SIZE);
 

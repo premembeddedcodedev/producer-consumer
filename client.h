@@ -19,7 +19,6 @@
 #define TRUE 1
 #define DEBUG 1 // 0 - no debug message, 1 - main points, 2 - all
 
-
 #define RECEPTIONTID 1
 #define CBQTID 2
 
@@ -29,12 +28,14 @@ typedef struct low_prio {
 }skip_q;
 
 typedef struct clinic_info {
+	int *thread_num;
 	patients_info_t pinfo;
 	doctor_info_t dinfo[NUMBER_OF_THREADS + 1];
 	Queue *wq;
 	Queue *cbq;
 	uint8_t thread_id;
 	uint32_t seq_id;
+	uint8_t doctor_max_patients;
 	pthread_t reception;
 	pthread_t leftroom;
 	pthread_t doctorpool;
