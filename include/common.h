@@ -1,21 +1,43 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
+#include <pthread.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <stdint.h>
+#include <time.h>
+#include <errno.h>
+#include <sys/time.h>
+#include <semaphore.h>
 #include "list.h"
+#include "client.h"
 #include "clinic.h"
 #include "doctor.h"
 #include "patient.h"
 
-/* User has to change below values to set the waitQ and CBQ size
- * and doctor max attend patients */
+#define TRUE 1
 
-#define WQMAX_ROOM_SIZE 4
-#define CBQMAX_ROOM_SIZE 100
-#define NUMBER_OF_THREADS 4
+#ifndef QueueElement
+#define QueueElement void*
+#endif
 
-#define DOCTOR1_SERVED_PATIENTS 1000
-#define DOCTOR2_SERVED_PATIENTS 1000
-#define DOCTOR3_SERVED_PATIENTS 1000
-#define DOCTOR4_SERVED_PATIENTS 1000
+typedef struct patient_data {
+	int patient_id;
+	int idle_time;
+	bool interrupted;
+	ptevt_register_t patient_reg_info;
+	struct list_head list;
+}patients_info_t;
+
+typedef struct{
+    int seq;
+    int capacity;
+    int size;
+    int pos;
+    QueueElement e;
+    patients_info_t *pinfo;
+    struct list_head list;
+} Queue;
 
 typedef struct doctor_info {
 	drevt_aptmt_t doc_deals_with_spec;
@@ -28,18 +50,33 @@ typedef struct doctor_info {
 	int max_patients;
 }doctor_info_t;
 
-typedef struct patient_data {
-	int patient_id;
-	int idle_time;
-	bool interrupted;
-	ptevt_register_t patient_reg_info;
-	struct list_head list;
-}patients_info_t;
+/* Clinic data structure */
+typedef struct clinic_info {
+	Queue *wq;
+	Queue *cbq;
+	pthread_t reception;
+	pthread_t leftroom;
+	pthread_mutex_t mutex;
+	pthread_cond_t vip_request;
+	pthread_cond_t cbq_request;
+	sem_t semaphore;
+	int thread_num[NUMBER_OF_THREADS + 1];
+	uint8_t doctor_max_patients;
+	patients_info_t pinfo;
+	pthread_t doctorpool[NUMBER_OF_THREADS + 1];
+	doctor_info_t dinfo[NUMBER_OF_THREADS + 1];
+}clinic_info_t;
 
-#ifdef DEBUG
-#define pr_debug(fmt, ...) { }
-#elif defined(DEBUG)
-#define pr_debug(fmt, ...) \
-	printf(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-#endif
+clinic_info_t *clinic_init(void);
+
+int enqueue(Queue *Q, patients_info_t *pinfo, bool is_waitq);
+
+patients_info_t *dequeue(Queue *Q, bool is_waitq);
+
+Queue *dequeue_ptr(Queue *Q);
+
+int enqueue_front(Queue *Q, patients_info_t *pinfo, bool is_waitq);
+
+Queue * initQueue(int max);
+
 #endif

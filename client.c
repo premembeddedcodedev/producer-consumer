@@ -2,9 +2,7 @@
 #include <signal.h>
 #include <string.h>
 #include <stdlib.h>
-#include "include/queue.h"
-#include "include/driver.h"
-#include "include/client.h"
+#include "include/common.h"
 
 int main()
 {

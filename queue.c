@@ -2,8 +2,7 @@
 #include <signal.h>
 #include <string.h>
 #include <stdlib.h>
-#include "include/queue.h"
-#include "include/client.h"
+#include "include/common.h"
 
 Queue * initQueue(int max)
 {

@@ -3,9 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <semaphore.h>
-#include "include/queue.h"
-#include "include/client.h"
 #include <pthread.h>
+#include "include/common.h"
 #include "include/list.h"
 #include "include/clinic.h"
 #include "include/doctor.h"
@@ -78,6 +77,7 @@ void wait_for_vip_timesignal(clinic_info_t *clinic_info, patients_info_t *pinfo,
 		pinfo->patient_reg_info.membership = MEMBERSHIP_PLATINUM;
 		enqueue_inpt_patient(clinic_info, pinfo);
 	} else {
+		printf("Timedout from %d thread \n", tid);
 		clinic_info->dinfo[tid].num_patients++;
 		clinic_info->dinfo[tid].max_patients++;
 		free(pinfo);
@@ -162,7 +162,19 @@ void *doctor_process(void *param)
 		}
 		pthread_mutex_unlock(&clinic_info->mutex);
 		sem_post(&clinic_info->semaphore);
-
+#if 0
+		if(clinic_info->dinfo[tid].interrupt_count >= 0) {
+			if(clinic_info->dinfo[tid].interrupt_count > 0)
+				printf("Interrupter patient is schedueled here\n");
+		} else {
+			sem_wait(&clinic_info->semaphore);
+			pthread_mutex_lock(&clinic_info->mutex);
+			enqueue_inpt_patient(clinic_info, pinfo);
+			pthread_mutex_unlock(&clinic_info->mutex);
+			sem_post(&clinic_info->semaphore);
+			continue;
+		}
+#endif
 		printf("Worker thread[%d] : Dq: ailment: %d, membership: %d\n",
 				tid, pinfo->patient_reg_info.ailment,
 				pinfo->patient_reg_info.membership);
@@ -187,9 +199,43 @@ void *doctor_process(void *param)
 			pthread_mutex_unlock(&clinic_info->mutex);
 			sem_post(&clinic_info->semaphore);
 		}
+
+		//if(clinic_info->dinfo[tid].interrupt_count > 0)
+		//	clinic_info->dinfo[tid].interrupt_count--;
+
 	}
 	pthread_exit(0);
 }
+
+/* Defining time based on the ailment type
+ * */
+int calculate_diag_time(ailment_e diag_type)
+{
+        int value = 0;
+
+        switch(diag_type) {
+                case AIL_CHECKUP:
+                        value = 12;
+                        break;
+                case AIL_GENERAL_MALAISE:
+                        value = 10;
+                        break;
+                case AIL_FEVER:
+                        value = 8;
+                        break;
+                case AIL_PHYSICAL_INJURY:
+                        value = 6;
+                        break;
+                case AIL_OTHER:
+                        value = 4;
+                        break;
+                default:
+                        break;
+        }
+
+        return value;
+}
+
 
 patients_info_t *register_details(void)
 {
@@ -248,7 +294,6 @@ void enqueue_cbq(Queue *cbq, Queue *wq)
  * Submits work to the callback queue thread to process the
  * callback room parients
  */
-
 int process_cbq(clinic_info_t *clinic_info)
 {
 	int rc = 0;
@@ -331,7 +376,7 @@ int q_process(clinic_info_t *clinic_info)
 		bool min_find = find_min(clinic_info->wq, pinfo, &pos);
 		if(pinfo->patient_reg_info.membership == MEMBERSHIP_VIP) {
 			if(pthread_cond_broadcast(&clinic_info->vip_request) == 0) {
-				printf("signal successful from : %s\n", __func__);
+				printf("signal sending from : %s\n", __func__);
 				enqueue_front(clinic_info->cbq, pinfo, false);
 			} else {
 				if(min_find) {
@@ -360,33 +405,8 @@ int q_process(clinic_info_t *clinic_info)
 	return 0;
 }
 
-int calculate_diag_time(ailment_e diag_type)
-{
-        int value = 0;
-
-        switch(diag_type) {
-                case AIL_CHECKUP:
-                        value = 12;
-                        break;
-                case AIL_GENERAL_MALAISE:
-                        value = 10;
-                        break;
-                case AIL_FEVER:
-                        value = 8;
-                        break;
-                case AIL_PHYSICAL_INJURY:
-                        value = 6;
-                        break;
-                case AIL_OTHER:
-                        value = 4;
-                        break;
-                default:
-                        break;
-        }
-
-        return value;
-}
-
+/* Registering the patients info randomly
+ */
 void *register_patients(void *param)
 {
 	clinic_info_t *clinic_info = (clinic_info_t *)param;
@@ -398,14 +418,14 @@ void *register_patients(void *param)
 
         while(1) {
                 val = (rand() % 6) + 4;
-                printf("\n\n************ Patient is about to enter after \
-                                @(%ds) time....\n", val);
+                printf("\n\n************ Patient is about to enter after "
+                                "@(%ds) time....\n", val);
                 sleep(val);
                 q_process(clinic_info);
 
                 while(check >= 1)  {
-                        printf("Doctor %d: patients served: %d, interrupter:\
-                                        %d\n", check,\
+                        printf("Doctor %d: patients served: %d, interrupter:"
+                                        "%d\n", check,
                                 clinic_info->dinfo[check].num_patients,\
                                 clinic_info->dinfo[check].interrupt_count);
                         check--;
@@ -486,6 +506,9 @@ void threads_clean(clinic_info_t *clinic_info)
 	printf("End of execution :)\n");
 }
 
+/* Initialising all the clinic data structure for patient and doctor info
+ * */
+
 clinic_info_t *clinic_init(void)
 {
 	clinic_info_t *clinic_info;
@@ -522,10 +545,10 @@ clinic_info_t *clinic_init(void)
 
 	sleep(1);
 
-	/* freeing up resources here */
-	
 	pthread_join(clinic_info->reception, NULL);
 	pthread_join(clinic_info->leftroom, NULL);
+	
+	/* freeing up resources here */
 
 	threads_clean(clinic_info);
 

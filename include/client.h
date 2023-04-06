@@ -1,43 +1,18 @@
 #ifndef __CLIENT_H__
 #define __CLIENT_H__
-#include <pthread.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <unistd.h>
-#include <stdint.h>
-#include <time.h>
-#include <errno.h>
-#include <sys/time.h>
-#include "queue.h"
-#include "list.h"
-#include "clinic.h"
-#include "doctor.h"
-#include "patient.h"
-#include <semaphore.h>
+#include "common.h"
 
-#define TRUE 1
 
-/* Clinic data structure */
+/* User has to change below values to set the waitQ and CBQ size
+ * and doctor max attend patients */
+#define WQMAX_ROOM_SIZE 1
+#define CBQMAX_ROOM_SIZE 100
+#define NUMBER_OF_THREADS 1
 
-typedef struct clinic_info {
-	Queue *wq;
-	Queue *cbq;
-	pthread_t reception;
-	pthread_t leftroom;
-	pthread_mutex_t mutex;
-	pthread_cond_t vip_request;
-	pthread_cond_t cbq_request;
-	sem_t semaphore;
-	int thread_num[NUMBER_OF_THREADS + 1];
-	uint8_t doctor_max_patients;
-	patients_info_t pinfo;
-	pthread_t doctorpool[NUMBER_OF_THREADS + 1];
-	doctor_info_t dinfo[NUMBER_OF_THREADS + 1];
-}clinic_info_t;
+/* Doctor can manage per day patients using below macros*/
+#define DOCTOR1_SERVED_PATIENTS 1000
+#define DOCTOR2_SERVED_PATIENTS 1000
+#define DOCTOR3_SERVED_PATIENTS 1000
+#define DOCTOR4_SERVED_PATIENTS 1000
 
-int process_cbq(clinic_info_t *clinic_info);
-int calculate_diag_time(ailment_e diag_type);
-void *getinstance(void);
-
-clinic_info_t *clinic_init(void);
 #endif
