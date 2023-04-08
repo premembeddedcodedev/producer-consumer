@@ -1,5 +1,12 @@
 # producer-consumer
 
+Usage of this package:
+1. clone the package
+2. build the application using make
+3. run the application using ./test
+4. change the inputs in client.h in include folder
+5. it will run all the scenarios automatially
+
 A new privatized health clinic just opened.  They have a 4 tier pricing model increasing in priority; Silver: 1, Gold: 2, Platinum: 3, and VIP: 4.  This clinic has D doctors, C chairs available in the waiting room, and 1 remote specialist.  The level of care between the pricing models is equivalent, but provides priority status for higher tiers.  When a patient arrives, they must take a seat in the waiting room before seeing a doctor.  If there is no space in the waiting room, the patient heads to the coffee shop next door and waits for a call letting them know there is a spot available in the waiting room.  Doctors are in a hurry to get home for the day and try and treat patients as fast as they can.  They always treat patients by ascending priority.  Sometimes the doctor will need to perform a teleconference with a specialist which will take a set amount of time.  This teleconference will take place immediately following the regular appointment.
  
 The priority model has some rules.  If the waiting room is full, a lower priority patient is kicked out by  a higher priority patient and heads to the coffee shop to await a callback.  Callbacks are also done on a priority basis.  If a lower priority patient is seeing a doctor, they can finish their visit if a higher priority patient enters the waiting room with one exception; VIP patients pay such an exorbitant amount that they can interrupt the doctor’s appointment of a lower priority patient.  There is one caveat to to this; the specialist has a bit of an ego and refuses to be interrupted.  This means that if a VIP patient tries to interrupt a lower priority patient’s appointment and they’re on a remote call with the specialist, tihey must wait for the specialist to finish.  If the VIP patient must wait, normal waiting room and callback rules apply.  The clinic isn’t completely heartless and will temporarily bump any interrupted patient to ‘Platinum’ status for the remainder of their visit so they can get back in to see their doctor as quickly as possible.  This happens the instant a patient is interrupted.  It’s important that the interrupted patient returns to the same doctor they were visiting before the interruption and that their original membership is restored immediately at the end of the doctor visit.
@@ -13,8 +20,4 @@ All D doctors and all P patients should be represented by separate threads.  Doc
 Create the multithreaded application with appropriate synchronization that depicts the Doctor’s office described above.
 
 
-1. clone the package
-2. build the application using make
-3. run the application using ./test
-4. change the inputs in client.h in include folder
-5. it will run all the scenarios automatially
+
