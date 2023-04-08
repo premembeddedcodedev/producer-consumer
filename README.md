@@ -7,6 +7,27 @@ Usage of this package:
 4. change the inputs in client.h in include folder
 5. it will run all the scenarios automatially
 
+Algorithm:
+
+there are 2 Queues processed threads created as follows:
+ 1. WaitQueue
+ 2. Callback queue
+ 
+Waitqueue continuously generate the traffic and ensure sending patients in asending order to doctors pool and when queue is full, it will enqueue the patients to callback queue.
+
+created doctors threads, scenarious covered are
+1. As normal subscription patient enters into doctors thread and wait for the signal from waitqueue thread - 
+   a. timout - safely process and wait for another patients from waitqueue thread
+   b. signal - when signal arrives from waitqueue, it will detect and enqueue it into WQ incase its free otherwise it enques on to callback queue front and fill the doctors details and wait for patients from wait queue thread.
+
+2. incase doctor got subscription as vip it will wait for designated amount of time
+
+3. doctor thread will generate the vip consiltation randomly for each 4 members of patients it will process and never terminates till doctor thread relinquish the threas time
+
+4. critical section has been kept for dequeing and data
+
+another thread is callback queue thread which has been notified when WQ has no member to serve.
+
 Scenarios:
 
 A new privatized health clinic just opened.  They have a 4 tier pricing model increasing in priority; Silver: 1, Gold: 2, Platinum: 3, and VIP: 4.  This clinic has D doctors, C chairs available in the waiting room, and 1 remote specialist.  The level of care between the pricing models is equivalent, but provides priority status for higher tiers.  When a patient arrives, they must take a seat in the waiting room before seeing a doctor.  If there is no space in the waiting room, the patient heads to the coffee shop next door and waits for a call letting them know there is a spot available in the waiting room.  Doctors are in a hurry to get home for the day and try and treat patients as fast as they can.  They always treat patients by ascending priority.  Sometimes the doctor will need to perform a teleconference with a specialist which will take a set amount of time.  This teleconference will take place immediately following the regular appointment.
