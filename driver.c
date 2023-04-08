@@ -11,12 +11,6 @@
 #include "include/patient.h"
 
 int g_patient_id = 0;
-clinic_info_t *g_clinic_info;
-
-void *getinstance(void)
-{
-	return g_clinic_info;
-}
 
 void enqueue_inpt_patient(clinic_info_t *clinic_info, patients_info_t *vacant)
 {
@@ -66,6 +60,7 @@ void wait_for_vip_timesignal(clinic_info_t *clinic_info, patients_info_t *pinfo,
 	clock_gettime(CLOCK_REALTIME, &finish);
 	if(rc == 0) {
 		clinic_info->dinfo[tid].interrupt_count++;
+		clinic_info->dinfo[tid].num_interrupts++;
 		printf("Signalled properly: doctor: %d interpter count : %d\n",
 				tid, clinic_info->dinfo[tid].interrupt_count);
 		elapsed = (finish.tv_sec - start.tv_sec);
@@ -73,7 +68,7 @@ void wait_for_vip_timesignal(clinic_info_t *clinic_info, patients_info_t *pinfo,
 		delaytime = (int) elapsed;
 		printf("elapsed : %d\n", delaytime);
 		pinfo->idle_time = elapsed;
-		pinfo->interrupted = true;
+		pinfo->interrupted_tid = tid;
 		pinfo->patient_reg_info.membership = MEMBERSHIP_PLATINUM;
 		enqueue_inpt_patient(clinic_info, pinfo);
 	} else {
@@ -132,16 +127,53 @@ bool is_doctor_max_patients_exceeded(clinic_info_t *clinic_info, int tid)
 	return false;
 }
 
+bool is_intptr_got_scheduled(clinic_info_t *clinic_info, patients_info_t *pinfo,
+		int tid)
+{
+	bool found = false;
+
+	if(pinfo->interrupted_tid == tid) {
+		printf("Interrupter patient is schedueled here\n");
+		if(clinic_info->dinfo[tid].interrupt_count >= 0)
+			clinic_info->dinfo[tid].interrupt_count--;
+		found =  true;
+	} else if(pinfo->interrupted_tid == 0) {
+		found = true;
+	} else {
+		sem_wait(&clinic_info->semaphore);
+		pthread_mutex_lock(&clinic_info->mutex);
+		enqueue_inpt_patient(clinic_info, pinfo);
+		pthread_mutex_unlock(&clinic_info->mutex);
+		sem_post(&clinic_info->semaphore);
+		found = false;
+	}
+
+	return found;
+}
+
+int get_threadid(clinic_info_t *clinic_info, pthread_t pid)
+{
+        int i = 0;
+
+        for(i=0; i<NUMBER_OF_THREADS; i++) {
+                if(pid == clinic_info->doctorpool[i])
+                        return i;
+        }
+
+        return 0;
+}
+
 /*
  * Submits work to the doctor thread to diagnose the patients in waitroom.
  */
 
 void *doctor_process(void *param)
 {
-	int tid = *((int *) param);
-
+	clinic_info_t *clinic_info = (clinic_info_t *) param;
+        pthread_t pid;
+        int tid;
+	
 	while(TRUE) {
-		clinic_info_t *clinic_info = (clinic_info_t *)getinstance();
 		sem_wait(&clinic_info->semaphore);
 		pthread_mutex_lock(&clinic_info->mutex);
 		/* Dequeuing the waitqueue patients and signaling to CB thread*/
@@ -152,29 +184,24 @@ void *doctor_process(void *param)
 			sem_post(&clinic_info->semaphore);
 			continue;
 		}
+                pid = pthread_self();
+                tid = get_threadid(clinic_info, pid) + 1;
 
 		clinic_info->dinfo[tid].max_patients++;
 		if(!is_doctor_max_patients_exceeded(clinic_info, tid)) {
+                	printf("doctor : %d interrupted ..!!!\n", tid);
 			pthread_mutex_unlock(&clinic_info->mutex);
 			sem_post(&clinic_info->semaphore);
 			pthread_exit(0);
 			break;
 		}
+
 		pthread_mutex_unlock(&clinic_info->mutex);
 		sem_post(&clinic_info->semaphore);
-#if 0
-		if(clinic_info->dinfo[tid].interrupt_count >= 0) {
-			if(clinic_info->dinfo[tid].interrupt_count > 0)
-				printf("Interrupter patient is schedueled here\n");
-		} else {
-			sem_wait(&clinic_info->semaphore);
-			pthread_mutex_lock(&clinic_info->mutex);
-			enqueue_inpt_patient(clinic_info, pinfo);
-			pthread_mutex_unlock(&clinic_info->mutex);
-			sem_post(&clinic_info->semaphore);
+
+		if(!is_intptr_got_scheduled(clinic_info, pinfo, tid))
 			continue;
-		}
-#endif
+
 		printf("Worker thread[%d] : Dq: ailment: %d, membership: %d\n",
 				tid, pinfo->patient_reg_info.ailment,
 				pinfo->patient_reg_info.membership);
@@ -184,12 +211,14 @@ void *doctor_process(void *param)
 		if(specialist_generation(clinic_info, tid)) {
 			clinic_info->dinfo[tid].num_patients++;
 			printf("in specialist consultation...\n");
+			clinic_info->dinfo[tid].num_splst_conslnts++;
 			fill_interrupter_details(clinic_info, tid, pinfo);
 			sleep(pinfo->idle_time + 7);
 			free(pinfo);
 		} else if(pinfo->patient_reg_info.membership
 				== MEMBERSHIP_VIP) {
 			clinic_info->dinfo[tid].num_patients++;
+			clinic_info->dinfo[tid].num_vip_conslnts++;
 			printf("VIP membership executing...\n");
 			sleep(pinfo->idle_time);
 			free(pinfo);
@@ -199,10 +228,6 @@ void *doctor_process(void *param)
 			pthread_mutex_unlock(&clinic_info->mutex);
 			sem_post(&clinic_info->semaphore);
 		}
-
-		//if(clinic_info->dinfo[tid].interrupt_count > 0)
-		//	clinic_info->dinfo[tid].interrupt_count--;
-
 	}
 	pthread_exit(0);
 }
@@ -211,29 +236,29 @@ void *doctor_process(void *param)
  * */
 int calculate_diag_time(ailment_e diag_type)
 {
-        int value = 0;
+	int value = 0;
 
-        switch(diag_type) {
-                case AIL_CHECKUP:
-                        value = 12;
-                        break;
-                case AIL_GENERAL_MALAISE:
-                        value = 10;
-                        break;
-                case AIL_FEVER:
-                        value = 8;
-                        break;
-                case AIL_PHYSICAL_INJURY:
-                        value = 6;
-                        break;
-                case AIL_OTHER:
-                        value = 4;
-                        break;
-                default:
-                        break;
-        }
+	switch(diag_type) {
+		case AIL_CHECKUP:
+			value = 12;
+			break;
+		case AIL_GENERAL_MALAISE:
+			value = 10;
+			break;
+		case AIL_FEVER:
+			value = 8;
+			break;
+		case AIL_PHYSICAL_INJURY:
+			value = 6;
+			break;
+		case AIL_OTHER:
+			value = 4;
+			break;
+		default:
+			break;
+	}
 
-        return value;
+	return value;
 }
 
 
@@ -406,46 +431,51 @@ int q_process(clinic_info_t *clinic_info)
 }
 
 /* Registering the patients info randomly
- */
+*/
 void *register_patients(void *param)
 {
 	clinic_info_t *clinic_info = (clinic_info_t *)param;
-      
+
 	int val = 0, check = NUMBER_OF_THREADS;
-        srand(time(NULL));
+	srand(time(NULL));
 
-        /* Generating ramdom patients and queueing them into WaitQ and CBQ */
+	/* Generating ramdom patients and queueing them into WaitQ and CBQ */
 
-        while(1) {
-                val = (rand() % 6) + 4;
-                printf("\n\n************ Patient is about to enter after "
-                                "@(%ds) time....\n", val);
-                sleep(val);
-                q_process(clinic_info);
+	while(clinic_info->max_patients_allowed < MAX_PATIENTS) {
+		val = (rand() % 6) + 4;
+		printf("\n\n************ Patient is about to enter after "
+				"@(%ds) time....\n", val);
+		sleep(val);
+		q_process(clinic_info);
 
-                while(check >= 1)  {
-                        printf("Doctor %d: patients served: %d, interrupter:"
-                                        "%d\n", check,
-                                clinic_info->dinfo[check].num_patients,\
-                                clinic_info->dinfo[check].interrupt_count);
-                        check--;
-                }
-                check = NUMBER_OF_THREADS;
+		while(check >= 1)  {
+			printf("Doctor %d: patients served: %d\t, interrupter:"
+					"%d\t, specialist_served:%d\t,"
+					"vip_served: %d\n", check,
+					clinic_info->dinfo[check].num_patients,\
+					clinic_info->dinfo[check].num_interrupts, \
+					clinic_info->dinfo[check].num_splst_conslnts,\
+					clinic_info->dinfo[check].num_vip_conslnts);
+			check--;
+		}
+		check = NUMBER_OF_THREADS;
 
-                printf("****************** Patient left.......\n\n");
-        }
+		clinic_info->max_patients_allowed++;
 
-        pthread_exit(0);
+		printf("****************** Patient left.......\n\n");
+	}
+
+	pthread_exit(0);
 }
 
 void *process_cbqleftover(void *param)
 {
 	clinic_info_t *clinic_info = (clinic_info_t *)param;
 
-        while(1)
-                process_cbq(clinic_info);
+	while(1)
+		process_cbq(clinic_info);
 
-        pthread_exit(0);
+	pthread_exit(0);
 }
 
 /*
@@ -454,22 +484,12 @@ void *process_cbqleftover(void *param)
  */
 void threads_init(clinic_info_t *clinic_info)
 {
-	int j = 1;
-
-	printf("Address of thread_num: %p\n", clinic_info->thread_num);
-
-	clinic_info->thread_num[0] = 1;
-
 	pthread_mutex_init(&clinic_info->mutex, NULL);
 	sem_init(&clinic_info->semaphore, 0, NUMBER_OF_THREADS);
 
-	for (int i = 0; i < NUMBER_OF_THREADS; ++i) {
-		clinic_info->thread_num[i] = j;
-		pthread_create(&clinic_info->doctorpool[j], NULL, doctor_process,
-				(void *) &clinic_info->thread_num[i]);
-		printf("Created %d thread successfully\n", clinic_info->thread_num[i]);
-		j++;
-	}
+	for (int i = 0; i < NUMBER_OF_THREADS; ++i)
+		pthread_create(&clinic_info->doctorpool[i+1], NULL, doctor_process,
+				(void *) clinic_info);
 
 	if (pthread_cond_init(&clinic_info->vip_request, NULL) != 0) {
 		perror("pthread_cond_init() error");
@@ -522,8 +542,6 @@ clinic_info_t *clinic_init(void)
 		return NULL;
 	}
 
-	g_clinic_info = clinic_info;
-
 	memset(clinic_info, 0, sizeof(clinic_info_t));
 
 	/* preparing WaitQueue size and callback size defined in header file */
@@ -547,7 +565,7 @@ clinic_info_t *clinic_init(void)
 
 	pthread_join(clinic_info->reception, NULL);
 	pthread_join(clinic_info->leftroom, NULL);
-	
+
 	/* freeing up resources here */
 
 	threads_clean(clinic_info);

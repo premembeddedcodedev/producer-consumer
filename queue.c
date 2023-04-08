@@ -66,7 +66,6 @@ patients_info_t *dequeue(Queue *Q, bool is_waitq)
 		ptr = tmp->pinfo;
 		//printf("membership: %d\n", ptr->patient_reg_info.membership);
 		list_del(Q->list.next);
-		free(tmp);
 		//printf("membership: %d\n", ptr->patient_reg_info.membership);
 		//print_list_data(&Q->list);
 		return ptr;
@@ -92,3 +91,21 @@ int enqueue(Queue *Q, patients_info_t *pinfo, bool is_waitq)
 	}
 }
 
+int enqueue_dinfo(Queue *Q, doctor_info_t *pinfo, bool is_waitq)
+{
+	Queue* newQ;
+	if(Q->size == Q->capacity){
+		printf(" %s : Queue is Full. No element added.\n", (is_waitq ? "WQ": "CBQ"));
+		return -1;
+	}
+	else{
+		Q->size++;
+		printf("Enq: #elements in %s : %d\n", (is_waitq ? "WQ": "CBQ"), Q->size);
+		newQ = (Queue*) malloc(sizeof(Queue));
+		newQ->dinfo = pinfo;
+		/* add to the list tail */
+		list_add_tail(&(newQ->list), &(Q->list));
+		//print_list_data(&Q->list);
+		return 0;
+	}
+}

@@ -24,20 +24,10 @@
 typedef struct patient_data {
 	int patient_id;
 	int idle_time;
-	bool interrupted;
+	int interrupted_tid;
 	ptevt_register_t patient_reg_info;
 	struct list_head list;
 }patients_info_t;
-
-typedef struct{
-    int seq;
-    int capacity;
-    int size;
-    int pos;
-    QueueElement e;
-    patients_info_t *pinfo;
-    struct list_head list;
-} Queue;
 
 typedef struct doctor_info {
 	drevt_aptmt_t doc_deals_with_spec;
@@ -47,19 +37,37 @@ typedef struct doctor_info {
 	int doctorid;
 	int patientid;
 	int interrupt_count;
+	int num_interrupts;
 	int max_patients;
+	int num_vip_conslnts;
+	int num_splst_conslnts;
 }doctor_info_t;
+
+typedef struct{
+    int seq;
+    int capacity;
+    int size;
+    int pos;
+    QueueElement e;
+    patients_info_t *pinfo;
+    doctor_info_t *dinfo;
+    struct list_head list;
+} Queue;
+
 
 /* Clinic data structure */
 typedef struct clinic_info {
 	Queue *wq;
 	Queue *cbq;
+	Queue *dq;
+	Queue *pq;
 	pthread_t reception;
 	pthread_t leftroom;
 	pthread_mutex_t mutex;
 	pthread_cond_t vip_request;
 	pthread_cond_t cbq_request;
 	sem_t semaphore;
+	int max_patients_allowed;
 	int thread_num[NUMBER_OF_THREADS + 1];
 	uint8_t doctor_max_patients;
 	patients_info_t pinfo;
@@ -70,6 +78,7 @@ typedef struct clinic_info {
 clinic_info_t *clinic_init(void);
 
 int enqueue(Queue *Q, patients_info_t *pinfo, bool is_waitq);
+int enqueue_dinfo(Queue *Q, doctor_info_t *pinfo, bool is_waitq);
 
 patients_info_t *dequeue(Queue *Q, bool is_waitq);
 
