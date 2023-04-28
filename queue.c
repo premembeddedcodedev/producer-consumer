@@ -33,24 +33,6 @@ int enqueue_front(Queue *Q, patients_info_t *pinfo, bool is_waitq)
 	}
 }
 
-Queue *dequeue_ptr(Queue *Q)
-{
-	Queue* tmp;
-	Queue *pinfo;
-
-	if(Q->size==0){
-		//printf("Queue is Empty.\n");
-		return NULL;
-	}else{
-		Q->size--;
-		tmp = list_entry(Q->list.next, Queue, list);
-		pinfo = tmp;
-		list_del(Q->list.next);
-		free(tmp);
-		return pinfo;
-	}
-}
-
 patients_info_t *dequeue(Queue *Q, bool is_waitq)
 {
 	patients_info_t *ptr;
