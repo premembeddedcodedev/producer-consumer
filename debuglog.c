@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "debuglog.h"
+#include "include/debuglog.h"
 
 FILE *hndl;
 char *savedFilename;
