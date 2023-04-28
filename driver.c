@@ -533,6 +533,10 @@ clinic_info_t *clinic_init(void)
 {
 	clinic_info_t *clinic_info;
 
+	DEBUGLOG_INIT("afile.log");
+        DEBUGLOG_LOG(1, "the value is: %d", g_patient_id);
+        DEBUGLOG_CLOSE();
+
 	/* Intialising the clinic data structure where it has info of 
 	 * patients and doctor data structures*/
 
