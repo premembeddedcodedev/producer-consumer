@@ -14,6 +14,7 @@
 #include "clinic.h"
 #include "doctor.h"
 #include "patient.h"
+#include "debuglog.h"
 
 #define TRUE 1
 
@@ -59,16 +60,12 @@ typedef struct{
 typedef struct clinic_info {
 	Queue *wq;
 	Queue *cbq;
-	Queue *dq;
-	Queue *pq;
 	pthread_t reception;
 	pthread_t leftroom;
 	pthread_mutex_t mutex;
 	pthread_cond_t vip_request;
 	pthread_cond_t cbq_request;
-	sem_t semaphore;
 	int max_patients_allowed;
-	int thread_num[NUMBER_OF_THREADS + 1];
 	uint8_t doctor_max_patients;
 	patients_info_t pinfo;
 	pthread_t doctorpool[NUMBER_OF_THREADS + 1];
