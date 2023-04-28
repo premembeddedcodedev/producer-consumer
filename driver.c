@@ -140,11 +140,11 @@ bool is_intptr_got_scheduled(clinic_info_t *clinic_info, patients_info_t *pinfo,
 	} else if(pinfo->interrupted_tid == 0) {
 		found = true;
 	} else {
-		sem_wait(&clinic_info->semaphore);
+		
 		pthread_mutex_lock(&clinic_info->mutex);
 		enqueue_inpt_patient(clinic_info, pinfo);
 		pthread_mutex_unlock(&clinic_info->mutex);
-		sem_post(&clinic_info->semaphore);
+		
 		found = false;
 	}
 
@@ -174,14 +174,14 @@ void *doctor_process(void *param)
         int tid;
 	
 	while(TRUE) {
-		sem_wait(&clinic_info->semaphore);
+		
 		pthread_mutex_lock(&clinic_info->mutex);
 		/* Dequeuing the waitqueue patients and signaling to CB thread*/
 		patients_info_t *pinfo = dequeue(clinic_info->wq, true);
 		if(!pinfo) {
 			pthread_cond_broadcast(&clinic_info->cbq_request);
 			pthread_mutex_unlock(&clinic_info->mutex);
-			sem_post(&clinic_info->semaphore);
+			
 			continue;
 		}
                 pid = pthread_self();
@@ -191,13 +191,13 @@ void *doctor_process(void *param)
 		if(!is_doctor_max_patients_exceeded(clinic_info, tid)) {
                 	printf("doctor : %d interrupted ..!!!\n", tid);
 			pthread_mutex_unlock(&clinic_info->mutex);
-			sem_post(&clinic_info->semaphore);
+			
 			pthread_exit(0);
 			break;
 		}
 
 		pthread_mutex_unlock(&clinic_info->mutex);
-		sem_post(&clinic_info->semaphore);
+		
 
 		if(!is_intptr_got_scheduled(clinic_info, pinfo, tid))
 			continue;
@@ -226,7 +226,7 @@ void *doctor_process(void *param)
 			pthread_mutex_lock(&clinic_info->mutex);
 			wait_for_vip_timesignal(clinic_info, pinfo, tid);	
 			pthread_mutex_unlock(&clinic_info->mutex);
-			sem_post(&clinic_info->semaphore);
+			
 		}
 	}
 	pthread_exit(0);
@@ -332,7 +332,7 @@ int process_cbq(clinic_info_t *clinic_info)
 		}
 	}
 
-	sem_post(&clinic_info->semaphore);
+	
 	pthread_mutex_unlock(&clinic_info->mutex);
 
 	return 0;
@@ -423,7 +423,7 @@ int q_process(clinic_info_t *clinic_info)
 		enqueue(clinic_info->wq, min_ptr, true);
 	}
 
-	sem_post(&clinic_info->semaphore);
+	
 	pthread_mutex_unlock(&clinic_info->mutex);
 	printf("pool submitted WQsize: %d CBQSize : %d\n",
 			clinic_info->wq->size, clinic_info->cbq->size);
@@ -485,7 +485,7 @@ void *process_cbqleftover(void *param)
 void threads_init(clinic_info_t *clinic_info)
 {
 	pthread_mutex_init(&clinic_info->mutex, NULL);
-	sem_init(&clinic_info->semaphore, 0, NUMBER_OF_THREADS);
+	
 
 	for (int i = 0; i < NUMBER_OF_THREADS; ++i)
 		pthread_create(&clinic_info->doctorpool[i+1], NULL, doctor_process,
